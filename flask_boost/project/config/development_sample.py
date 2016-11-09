@@ -7,4 +7,4 @@ class DevelopmentConfig(Config):
     DEBUG = True
 
     # SQLAlchemy config
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:@localhost/#{project}"
+    SQLALCHEMY_DATABASE_URI = "postgresql://root:@localhost/#{project}"
