@@ -2,18 +2,18 @@
 # coding: utf-8
 
 """
-Flask Boost
+Flask Turbo Boost
 
 Usage:
-  boost new <project>
-  boost new controller <controller>
-  boost new action <controller> <action> [-t]
-  boost new form <form>
-  boost new model <model>
-  boost new macro <macro>
-  boost new macro <category> <macro>
-  boost -v | --version
-  boost -h | --help
+  turbo new <project>
+  turbo new controller <controller>
+  turbo new action <controller> <action> [-t]
+  turbo new form <form>
+  turbo new model <model>
+  turbo new macro <macro>
+  turbo new macro <category> <macro>
+  turbo -v | --version
+  turbo -h | --help
 
 Options:
   -h, --help          Help information.
