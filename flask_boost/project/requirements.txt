@@ -1,12 +1,20 @@
+# Basic
 Flask==0.10.1
 Flask-WTF==0.12
 Flask-Script==2.0.5
 Flask-SQLAlchemy==2.1
 Flask-DebugToolbar==0.10.0
 Flask-Migrate==1.6.0
-PyMySQL==0.6.7
+
+# Athentication
+Flask-Security
+
+# database
+psyconpg2 
+# PyMySQL==0.6.7
+
+# util
 itsdangerous==0.24
-permission==0.3.0
 six==1.10.0
 raven==5.8.1
 
