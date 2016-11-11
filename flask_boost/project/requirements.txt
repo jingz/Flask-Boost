@@ -13,7 +13,7 @@ Flask-Admin
 Flask-Security
 
 # database
-psyconpg2 
+psycopg2 
 
 # util
 itsdangerous==0.24
