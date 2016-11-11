@@ -6,12 +6,14 @@ Flask-SQLAlchemy==2.1
 Flask-DebugToolbar==0.10.0
 Flask-Migrate==1.6.0
 
+# admin
+Flask-Admin
+
 # Athentication
 Flask-Security
 
 # database
 psyconpg2 
-# PyMySQL==0.6.7
 
 # util
 itsdangerous==0.24
