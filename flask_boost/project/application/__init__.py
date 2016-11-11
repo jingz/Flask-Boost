@@ -80,7 +80,7 @@ def create_app():
 def register_jinja(app):
     """Register jinja filters, vars, functions."""
     import jinja2
-    from .utils import filters, permissions, helpers
+    from .utils import filters, helpers
 
     if app.debug or app.testing:
         my_loader = jinja2.ChoiceLoader([
@@ -121,8 +121,7 @@ def register_jinja(app):
     app.jinja_env.globals.update({
         'absolute_url_for': helpers.absolute_url_for,
         'url_for_other_page': url_for_other_page,
-        'rules': rules,
-        'permissions': permissions
+        'rules': rules
     })
 
 
