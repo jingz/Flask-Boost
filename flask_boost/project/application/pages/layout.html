@@ -10,10 +10,9 @@
     {% block meta %}{% endblock %}
     <link rel="Shortcut Icon" href="/static/image/favicon.png">
     {# CSS libs #}
-    <link rel="stylesheet" href="/static/css/libs/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/css/libs/bulma.css"/>
     <link rel="stylesheet" href="/static/css/libs/font-awesome.min.css"/>
     {# CSS layout #}
-    <link rel="stylesheet" href="/static/css/bootstrap.theme.css"/>
     <link rel="stylesheet" href="/static/css/common.css"/>
     <link rel="stylesheet" href="/static/output/macros.css"/>
     <link rel="stylesheet" href="/static/css/layout.css"/>
@@ -33,7 +32,6 @@
     {# JS libs #}
     <script src="/static/js/libs/respond.min.js"></script>
     <script src="/static/js/libs/jquery.min.js"></script>
-    <script src="/static/js/libs/bootstrap.min.js"></script>
     <script src="/static/js/init.js"></script>
 </head>
 
@@ -42,58 +40,39 @@
 {# Flash message #}
 {% with message = get_flashed_messages()[0] %}
     {% if message %}
-        <div class="alert alert-info flash-message">{{ message }}</div>
+    <div class='container'>
+        <div class="notificatin is-info">{{ message }}</div>
+    </div>
     {% endif %}
 {% endwith %}
 
-<nav class="navbar navbar-default navbar-static-top">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="{{ url_for('site.index') }}">
-                #{project|title}
-            </a>
-        </div>
+<nav class="nav has-shadow">
+    <div class="nav-left">
+        <h1 class='nav-item is-brand'>
+            <a class="title" href="{{ url_for('site.index') }}"> Aproject </a>
+        </h1>
+    </div>
 
-        <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li id="nav-index">
-                    <a href="{{ url_for('site.index') }}">Home</a>
-                </li>
-                <li id="nav-about">
-                    <a href="{{ url_for('site.about') }}">About</a>
-                </li>
-            </ul>
+    <div class="nav-center nav-menu">
+        <a class='nav-item' href="{{ url_for('site.index') }}">Home</a>
+        <a class='nav-item' href="{{ url_for('site.about') }}">About</a>
+        <form class="nav-item" role="search" method="get" action="#">
+            <input type="text" name="keyword" class="input is-small" placeholder="Search">
+            <button class="button is-small" type="submit">
+                <span class="fa fa-search"></span>
+            </button>
+        </form>
+    </div>
 
-            <form class="navbar-form navbar-left" role="search" method="get" action="#">
-                <div class="input-group">
-                    <input type="text" name="keyword" class="form-control input-sm"
-                           placeholder="">
-               <span class="input-group-btn">
-                  <button class="btn btn-default btn-sm" type="submit">
-                      <span class="fa fa-search"></span>
-                  </button>
-               </span>
-                </div>
-            </form>
-
-            <ul class="nav navbar-nav navbar-right">
-                {% if g.user %}
-                    <li id="nav-settings">
-                        <a href="#">{{ g.user.name }}</a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('account.signout') }}">Sign out</a>
-                    </li>
-                {% else %}
-                    <li id="nav-signin">
-                        <a href="{{ url_for('account.signin') }}">Sign in</a>
-                    </li>
-                    <li id="nav-signup">
-                        <a href="{{ url_for('account.signup') }}">Sign up</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
+    <div class='nav-right'>
+        {% if g.user %}
+            <a class='nav-item' href="#">{{ g.user.name }}</a>
+            <a class='nav-item' href="{{ url_for('security.logout') }}">Sign out</a>
+        {% else %}
+            <a class='nav-item' href="{{ url_for('security.login') }}">Sign in</a>
+            <!-- if security allow registerable then modify this -->
+            <a class='nav-item' href="{{ url_for('security.login') }}">Sign up</a>
+        {% endif %}
     </div>
 </nav>
 
@@ -102,15 +81,16 @@
     {% block page_content %}{% endblock %}
 </div>
 
-<footer>
+<footer class='footer'>
     <div class='container'>
-        <div id='copyright' class="pull-left">
-            © 2015 #{project|title}
+        <div class='content has-text-centered'>
+            <div id='copyright'>
+                <strong>© 2015 Aproject</strong>
+            </div>
+            <p>
+                <a href="{{ url_for('site.about') }}">About</a>
+            </p>
         </div>
-
-        <ul id='links' class="pull-right list-unstyled list-inline">
-            <li><a href="{{ url_for('site.about') }}">About</a></li>
-        </ul>
     </div>
 </footer>
 
@@ -123,5 +103,6 @@
 {# JS page #}
 {% block page_js %}{% endblock %}
 
+    </div>
 </body>
 </html>

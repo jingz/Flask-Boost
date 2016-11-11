@@ -68,6 +68,7 @@ def create_app():
 
     # Register components
     register_db(app)
+    register_security(app)
     register_routes(app)
     register_jinja(app)
     register_error_handle(app)
@@ -123,6 +124,13 @@ def register_jinja(app):
         'rules': rules,
         'permissions': permissions
     })
+
+
+def register_security(app):
+    from flask_security import SQLAlchemyUserDatastore, Security
+    from .models import db, User, Role
+    user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+    security = Security(app, user_datastore)
 
 
 def register_db(app):
