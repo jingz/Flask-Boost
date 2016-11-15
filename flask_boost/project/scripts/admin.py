@@ -3,7 +3,7 @@ from flask_script import Command, Manager, Option
 from application.models import db
 import application.models as models
 
-admin_manager = Manager(current_app)
+admin_manager = Manager(current_app, help="Manage admin stuff such as creating user.")
 
 @admin_manager.option("--name", "-n", dest="name", default='admin')
 def create_admin(name='admin'):
