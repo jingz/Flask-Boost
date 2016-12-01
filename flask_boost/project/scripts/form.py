@@ -6,7 +6,7 @@ from application.models import db
 import application.models as models
 import jinja2
 
-form_manager = Manager(current_app, help='test form')
+form_manager = Manager(current_app, help='Form generation helper')
 
 
 def _slug(s):
@@ -16,7 +16,7 @@ def _slug(s):
 @form_manager.option("--model_name", "-m", dest="model_name", default='User')
 def gen(model_name):
     """ generate wtform for models """
-    model = getattr(models, model_name)
+    model = getattr(models, model_name, None)
     if model:
         meta = list()
         cols = [c for c in model.__table__.columns]
@@ -61,5 +61,7 @@ def gen(model_name):
         with open(template_path, 'r') as template:
             t = template.read()
             temp = jinja2.Template(t)
-            print temp.render(model_name='test', columns=meta, slug=_slug)
+            print temp.render(model_name=model.__name__, columns=meta, slug=_slug)
+    else:
+        print "%s Model not found" % model_name
 
