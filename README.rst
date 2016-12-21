@@ -1,14 +1,14 @@
 Flask-Boost
 ===========
 
-.. image:: http://img.shields.io/pypi/v/flask-boost.svg
-   :target: https://pypi.python.org/pypi/flask-boost
+.. image:: http://img.shields.io/pypi/v/flask-turbo-boost.svg
+   :target: https://pypi.python.org/pypi/flask-turbo-boost
    :alt: Latest Version
-.. image:: http://img.shields.io/pypi/dm/flask-boost.svg
-   :target: https://pypi.python.org/pypi/flask-boost
+.. image:: http://img.shields.io/pypi/dm/flask-turbo-boost.svg
+   :target: https://pypi.python.org/pypi/flask-turbo-boost
    :alt: Downloads Per Month
-.. image:: http://img.shields.io/pypi/pyversions/flask-boost.svg
-   :target: https://pypi.python.org/pypi/flask-boost
+.. image:: http://img.shields.io/pypi/pyversions/flask-turbo-boost.svg
+   :target: https://pypi.python.org/pypi/flask-turbo-boost
    :alt: Python Versions
 .. image:: http://img.shields.io/badge/license-MIT-blue.svg
    :target: https://github.com/hustlzp/Flask-Boost/blob/master/LICENSE
