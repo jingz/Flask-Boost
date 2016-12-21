@@ -32,14 +32,13 @@ Features
   * Use Flask-SQLAlchemy and Flask-Migrate as database tools.
   * Use Flask-WTF to validate forms.
   * Use Flask-Script to help writing scripts.
-  * Use permission_ to define permissions.
-  * Use Bootstrap as frontend framework.
-  * Use Bower to manage frontend packages.
+  * Use Bulma as frontend framework.
   * Use Gulp and FIS_ to compile static assets.
   * Use Gunicorn to run Flask app and Supervisor to manage Gunicorn processes.
   * Use Fabric as deployment tool.
   * Use Sentry to log exceptions.
   * Use Nginx to serve static files.
+  * Use sub script command to generate admin and form from a model.
 
 * **Scaffold Commands**
 
