@@ -38,12 +38,13 @@
 <body>
 
 {# Flash message #}
-{% with message = get_flashed_messages()[0] %}
-    {% if message %}
-    <div class='container'>
-        <div class="notificatin is-info">{{ message }}</div>
-    </div>
-    {% endif %}
+{% with messages = get_flashed_messages() %}
+    {% for msg in messages %}
+        {% if msg %}
+        <div class="notification is-danger flash-message" 
+             style='width: 100%;'>{{ msg }}</div>
+        {% endif %}
+    {% endfor %}
 {% endwith %}
 
 <nav class="nav has-shadow">
