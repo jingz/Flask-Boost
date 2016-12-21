@@ -120,9 +120,10 @@ def register_jinja(app):
 
     app.jinja_env.globals.update({
         'absolute_url_for': helpers.absolute_url_for,
-        'url_for_other_page': url_for_other_page,
-        'rules': rules
+        'url_for_other_page': url_for_other_page
     })
+    # 'rules': rules,
+    # 'permissions': permissions
 
 
 def register_security(app):
