@@ -56,7 +56,7 @@ Installation
 
 ::
 
-    pip install flask-boost
+    pip install flask-turbo-boost
 
 Development Guide
 -----------------
@@ -66,7 +66,7 @@ Init project
 
 ::
 
-    boost new <your_project_name>
+    turbo new <your_project_name>
 
 Setup backend requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
