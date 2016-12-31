@@ -9,13 +9,13 @@ class Config(object):
     TESTING = False
     SECRET_KEY = "\xb5\xb3}#\xb7A\xcac\x9d0\xb6\x0f\x80z\x97\x00\x1e\xc0\xb8+\xe9)\xf0}"
     PERMANENT_SESSION_LIFETIME = 3600 * 24 * 7
-    SESSION_COOKIE_NAME = '#{project}_session'
+    SESSION_COOKIE_NAME = 'marcop_session'
 
     # Root path of project
     PROJECT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
     # Site domain
-    SITE_TITLE = "#{project}"
+    SITE_TITLE = "marcop"
     SITE_DOMAIN = "http://localhost:5000"
 
     # SQLAlchemy config
@@ -24,6 +24,14 @@ class Config(object):
     # http://docs.sqlalchemy.org/en/rel_0_9/core/engines.html#database-urls
     SQLALCHEMY_DATABASE_URI = "postgresql://user:password@host/database"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    # Flask Security
+    # https://pythonhosted.org/Flask-Security/configuration.html
+    # SECURITY_PASSWORD_HASH
+    SECURITY_REGISTERABLE = True
+    SECURITY_SEND_REGISTER_EMAIL = False
+    SECURITY_SEND_PASSWORD_CHANGE_EMAIL = False
+    SECURITY_LOGIN_WITHOUT_CONFIRMATION = False
 
     # Flask-DebugToolbar
     DEBUG_TB_INTERCEPT_REDIRECTS = False
