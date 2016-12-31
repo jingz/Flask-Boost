@@ -20,14 +20,5 @@ class User(db.Model, UserMixin):
     # relationship
     roles = db.relationship("Role", secondary="users_roles", backref='users')
 
-    def __setattr__(self, name, value):
-        # Hash password when set it.
-        if name == 'password':
-            value = generate_password_hash(value)
-        super(User, self).__setattr__(name, value)
-
-    def check_password(self, password):
-        return check_password_hash(self.password, password)
-
     def __repr__(self):
         return '<User %s>' % self.name

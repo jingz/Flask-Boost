@@ -1,4 +1,5 @@
 from flask import current_app
+from flask_security import SQLAlchemyUserDatastore
 from flask_script import Command, Manager, Option
 from application.models import db
 import application.models as models
@@ -6,7 +7,9 @@ import application.models as models
 admin_manager = Manager(current_app, help="Manage admin stuff such as creating user.")
 
 @admin_manager.option("--name", "-n", dest="name", default='admin')
-def create_admin(name='admin'):
+def create_fs_admin(name='admin'):
+    """ create initial flask security admin """
+
     # find role admin
     r = models.Role.query.filter_by(name='admin').first()
     if not r:
@@ -19,16 +22,17 @@ def create_admin(name='admin'):
 
     u = models.User.query.filter_by(name=name).first()
     if not u:
-        u = models.User(name=name)
-        u.email = "%s@email.com" % name
-        u.password = "password"
-        u.is_admin = True
-        u.active = True
+        user_datastore = SQLAlchemyUserDatastore(db, models.User, models.Role)
+        email = "%s@email.com" % name
+        user_datastore.create_user(email=email, 
+                name='admin',
+                is_admin=True,
+                password='password',
+                roles=['admin'])
         try:
-            u.roles.append(r)
-            db.session.add(u)
             db.session.commit()
+            print "admin name: %s was created!" % name
         except Exception, e:
             print e.message
     else:
-        print "admin name: %s was created!" % name
+        print "admin name: %s already existed" % name
