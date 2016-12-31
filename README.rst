@@ -32,7 +32,9 @@ Features
   * Use Flask-SQLAlchemy and Flask-Migrate as database tools.
   * Use Flask-WTF to validate forms.
   * Use Flask-Script to help writing scripts.
+  * Use Flask-Security for user management.
   * Use Bulma as frontend framework.
+
   * Use Gulp and FIS_ to compile static assets.
   * Use Gunicorn to run Flask app and Supervisor to manage Gunicorn processes.
   * Use Fabric as deployment tool.
@@ -42,12 +44,12 @@ Features
 
 * **Scaffold Commands**
 
-  * Generate project files: ``boost new <project>``
-  * Generate controller files: ``boost new controller <controller>``
-  * Generate action files: ``boost new action <controller> <action> [-t]``
-  * Generate form files: ``boost new form <form>``
-  * Generate model files: ``boost new model <model>``
-  * Generate macro files: ``boost new macro <category> <macro>`` or ``boost new macro <macro>``
+  * Generate project files: ``turbo new <project>``
+  * Generate controller files: ``turbo new controller <controller>``
+  * Generate action files: ``turbo new action <controller> <action> [-t]``
+  * Generate form files: ``turbo new form <form>``
+  * Generate model files: ``turbo new model <model>``
+  * Generate macro files: ``turbo new macro <category> <macro>`` or ``boost new macro <macro>``
 
 .. _permission: https://github.com/hustlzp/permission
 
