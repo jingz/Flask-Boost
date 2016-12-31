@@ -67,7 +67,7 @@
 
     <div class='nav-right'>
         {% if g.user %}
-            <a class='nav-item' href="#">{{ g.user.name }}</a>
+            <a class='nav-item' href="#">{{ g.user.email }}</a>
             <a class='nav-item' href="{{ url_for('security.logout') }}">Sign out</a>
         {% else %}
             <a class='nav-item' href="{{ url_for('security.login') }}">Sign in</a>
