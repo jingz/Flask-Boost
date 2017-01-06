@@ -69,6 +69,7 @@ def create_app():
     # Register components
     register_db(app)
     register_security(app)
+    register_social_auth(app)
     register_routes(app)
     register_jinja(app)
     register_error_handle(app)
@@ -131,6 +132,18 @@ def register_security(app):
     from .models import db, User, Role
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     security = Security(app, user_datastore)
+
+
+def register_social_auth(app):
+    from .models import db
+    from social.apps.flask_app.default.models import init_social
+    init_social(app, db.session)
+
+    from social.apps.flask_app.template_filters import backends
+    app.context_processor(backends)
+
+    from social_flask.routes import social_auth
+    app.register_blueprint(social_auth)
 
 
 def register_db(app):
