@@ -12,6 +12,13 @@ Flask-Admin
 # Athentication
 Flask-Security
 
+# Social Auth
+python-social-auth
+social-auth-app-flask
+social-auth-app-flask-sqlalchemy
+social-auth-core
+social-auth-storage-sqlalchemy
+
 # database
 psycopg2 
 
