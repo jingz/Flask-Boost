@@ -19,6 +19,7 @@
     {# CSS page #}
     {% block page_css %}{% endblock %}
     {# JS global vars #}
+    <!--
     <script type="text/javascript">
         var g = {
             domain: "{{ config.SITE_DOMAIN }}",
@@ -29,6 +30,7 @@
             userId: {% if g.user %}{{ g.user.id }}{% else %}false{% endif %}
         };
     </script>
+    -->
     {# JS libs #}
     <script src="/static/js/libs/respond.min.js"></script>
     <script src="/static/js/libs/jquery.min.js"></script>
@@ -52,31 +54,29 @@
         <h1 class='nav-item is-brand'>
             <a class="title" href="{{ url_for('site.index') }}"> MARCOP </a>
         </h1>
-    </div>
-
-    <div class="nav-center nav-menu">
-        <a class='nav-item' href="{{ url_for('site.index') }}">Home</a>
-        <a class='nav-item' href="{{ url_for('site.about') }}">About</a>
         <form class="nav-item" role="search" method="get" action="#">
-            <input type="text" name="keyword" class="input is-small" placeholder="Search">
-            <button class="button is-small" type="submit">
-                <span class="fa fa-search"></span>
-            </button>
+            <p class='control has-icon'>
+                <input type="text" name="keyword" class="input" placeholder="Search">
+                <span class="icon">
+                    <i class='fa fa-search'></i>
+                </span>
+            </p>
         </form>
     </div>
 
-    <div class='nav-right'>
-        {% if g.user %}
-            <a class='nav-item' href="#">{{ g.user.email }}</a>
-            <a class='nav-item' href="{{ url_for('security.logout') }}">Sign out</a>
-        {% else %}
-            <a class='nav-item' 
-               style='background-color: #385998; color: white;'
-               href="{{ url_for('social.auth', backend='facebook') }}">Sign in with Facebook</a>
+    <div class="nav-center nav-menu">
+    </div>
 
-            <a class='nav-item' href="{{ url_for('security.login') }}">Sign in Email</a>
+    <div class='nav-right'>
+        {% if g.user.is_authenticated %}
+        <a class='nav-item' href="#"><strong>{{ g.user.email or g.user.name }}</strong></a>
+            <a class='nav-item' href="{{ url_for('security.logout') }}"><button class='button is-danger'>Sign out</button></a>
+        {% else %}
+            <a class='nav-item' href="{{ url_for('social_login', provider='facebook') }}">
+                <button class='button' style='background-color: #385998; color: white;'>Login with Facebook</button></a>
+            <a class='nav-item' href="{{ url_for('security.login') }}"><button class='button is-info'>Sign in Email</button></a>
             <!-- if security allow registerable then modify this -->
-            <a class='nav-item' href="{{ url_for('security.register') }}">Sign up</a>
+            <a class='nav-item' href="{{ url_for('security.register') }}"><button class='button is-success'>Sign Up</button></a>
         {% endif %}
     </div>
 </nav>

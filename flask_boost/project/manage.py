@@ -1,6 +1,7 @@
 # coding: utf-8
 import os
 import glob2
+from flask import url_for
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
 from application import create_app
@@ -53,6 +54,32 @@ def build():
     os.system('gulp')
     os.chdir('application')
     os.system('fis release -d ../output -opmD')
+
+
+@manager.command
+def init_psa():
+    from application.models import db
+    from social.apps.flask_app.default import models
+    models.PSABase.metadata.create_all(db.engine)
+
+
+@manager.command
+def routes():
+    import urllib
+    output = []
+    for rule in app.url_map.iter_rules():
+
+        options = {}
+        for arg in rule.arguments:
+            options[arg] = "[{0}]".format(arg)
+
+        methods = ','.join(rule.methods)
+        url = url_for(rule.endpoint, **options)
+        line = urllib.unquote("{:50s} {:20s} {}".format(rule.endpoint, methods, url))
+        output.append(line)
+    
+    for line in sorted(output):
+        print line
 
 
 if __name__ == "__main__":

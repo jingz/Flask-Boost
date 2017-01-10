@@ -9,13 +9,14 @@ if project_path not in sys.path:
 
 import time
 import logging
-from flask import Flask, request, url_for, g, render_template
+from flask import Flask, request, url_for, g, render_template, session
 from flask_wtf.csrf import CsrfProtect
 from flask_debugtoolbar import DebugToolbarExtension
 from werkzeug.wsgi import SharedDataMiddleware
 from werkzeug.contrib.fixers import ProxyFix
 from six import iteritems
-from .utils.account import get_current_user
+from .utils.social_auth import get_current_user
+from flask_security.core import current_user, AnonymousUser
 from config import load_config
 
 # convert python's encoding to utf8
@@ -69,7 +70,7 @@ def create_app():
     # Register components
     register_db(app)
     register_security(app)
-    register_social_auth(app)
+    # register_social_auth(app)
     register_routes(app)
     register_jinja(app)
     register_error_handle(app)
@@ -130,16 +131,22 @@ def register_jinja(app):
 def register_security(app):
     from flask_security import SQLAlchemyUserDatastore, Security
     from .models import db, User, Role
+    from flask_social import Social
+
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-    security = Security(app, user_datastore)
+    app.security = Security(app, user_datastore)
+
+    from application.utils.social_auth import init_social_auth
+    init_social_auth(app)
 
 
 def register_social_auth(app):
     from .models import db
-    from social.apps.flask_app.default.models import init_social
-    init_social(app, db.session)
+    from social_flask_sqlalchemy.models import init_social
+    init_social(app, db)
 
-    from social.apps.flask_app.template_filters import backends
+    # from social.flask_app.template_filters import backends
+    from social_flask.template_filters import backends
     app.context_processor(backends)
 
     from social_flask.routes import social_auth
@@ -185,9 +192,9 @@ def register_hooks(app):
 
     @app.before_request
     def before_request():
-        g.user = get_current_user()
-        if g.user and g.user.is_admin:
-            g._before_request_time = time.time()
+       g.user = get_current_user()
+       if g.user is not None and g.user.has_role('admin'):
+           g._before_request_time = time.time()
 
     @app.after_request
     def after_request(response):
