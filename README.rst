@@ -33,9 +33,9 @@ Features
   * Use Flask-WTF to validate forms.
   * Use Flask-Script to help writing scripts.
   * Use Flask-Security for user management.
+  * Use Flask-OAuthlib for social user authentication.
   * Use Bulma as frontend framework.
 
-  * Use Gulp and FIS_ to compile static assets.
   * Use Gunicorn to run Flask app and Supervisor to manage Gunicorn processes.
   * Use Fabric as deployment tool.
   * Use Sentry to log exceptions.
