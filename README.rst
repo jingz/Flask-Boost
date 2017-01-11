@@ -141,34 +141,16 @@ Scaffold commands
 
 ::
 
-    boost new <project>
-    boost new controller <controller>
-    boost new action <controller> <action> [-t]
-    boost new form <form>
-    boost new model <model>
-    boost new macro <category> <macro>
-    boost new macro <macro>
-    boost -v
-    boost -h
+    turbo new <project>
+    turbo new controller <controller>
+    turbo new action <controller> <action> [-t]
+    turbo new form <form>
+    turbo new model <model>
+    turbo new macro <category> <macro>
+    turbo new macro <macro>
+    turbo -v
+    turbo -h
 
-Recommended IDE
-~~~~~~~~~~~~~~~
-
-PyCharm_ is the recommended IDE for Flask-Boost.
-
-Recommended preferences:
-
-* In ``Preferences -> Project -> Project Interpreter``, set ``venv`` as project interpreter.
-* In ``Preferences -> Project -> Project Structure``, set ``application/pages`` and ``application/macros`` as template folders, set ``application`` and ``application/static/css`` as resource folders.
-* In ``Language & Frameworks -> JavaScript -> Bower``, set ``bower.json`` as bower.json.
-
-Recommended PyCharm plugins:
-
-* .ignore
-* Markdown
-* Bootstrap3
-
-.. _PyCharm: https://www.jetbrains.com/pycharm/
 
 First Production Deploy
 -----------------------
@@ -219,30 +201,6 @@ Update project root path as needed in ``deploy/nginx.conf`` and ``deploy/supervi
     cp deploy/flask_env.sh /etc/profile.d/
     cp deploy/nginx.conf /etc/nginx/conf.d/<your_project_name>.conf
     cp deploy/supervisor.conf /etc/supervisor/conf.d/<your_project_name>.conf
-
-Build assets
-~~~~~~~~~~~~
-
-Install Node.js first and then install Bower_, FIS_ and Gulp_ globally::
-
-    npm install -g bower
-    npm install -g fis
-    npm install -g fis-postpackager-simple
-    npm install -g gulp
-
-Install local packages::
-
-    npm install
-    bower install
-
-Then::
-
-    gulp
-    python manage.py build
-
-.. _Bower: http://bower.io
-.. _FIS: http://fex-team.github.io/fis-site/
-.. _Gulp: http://gulpjs.com
 
 Start app
 ~~~~~~~~~
