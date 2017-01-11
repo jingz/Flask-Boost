@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
-import flask_boost
+import flask_turbo_boost
 
 entry_points = {
     "console_scripts": [
-        "turbo = flask_boost.cli:main",
+        "turbo = flask_turbo_boost.cli:main",
     ]
 }
 
@@ -12,7 +12,7 @@ with open("requirements.txt") as f:
 
 setup(
     name='Flask-Turbo-Boost',
-    version=flask_boost.__version__,
+    version=flask_turbo_boost.__version__,
     packages=find_packages(),
     include_package_data=True,
     description='Forked Flask-Boost - Flask application generator for boosting your development.',

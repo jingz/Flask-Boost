@@ -1,4 +1,0 @@
-#{project}
-=======
-
-Introduction to #{project}.
