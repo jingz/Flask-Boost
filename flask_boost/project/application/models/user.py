@@ -1,7 +1,5 @@
 # coding: utf-8
 from flask_security import UserMixin
-from flask_social import Social
-from flask_social.datastore import SQLAlchemyConnectionDatastore
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from ._base import db

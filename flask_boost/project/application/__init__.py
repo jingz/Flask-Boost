@@ -131,7 +131,6 @@ def register_jinja(app):
 def register_security(app):
     from flask_security import SQLAlchemyUserDatastore, Security
     from .models import db, User, Role
-    from flask_social import Social
 
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     app.security = Security(app, user_datastore)
