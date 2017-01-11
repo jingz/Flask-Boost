@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% from "_form.html" import field_with_errors %}
+{% from "security/_macros.html" import render_field %}
+
+{% block page_content %}
+<div class='column is-4 is-offset-4'>
+<section class='section content'>
+    {% include "security/_messages.html" %}
+    <h2>Login</h2>
+    <form action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
+      {{ login_user_form.hidden_tag() }}
+      {{ field_with_errors(login_user_form.email) }}
+      {{ field_with_errors(login_user_form.password) }}
+      {{ field_with_errors(login_user_form.remember) }}
+      {{ render_field(login_user_form.next) }}
+      {{ login_user_form.submit(class_='button is-primary') }}
+    </form>
+    <!-- {% include "security/_menu.html" %} -->
+</section>
+</div>
+{% endblock %}

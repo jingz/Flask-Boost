@@ -1,0 +1,16 @@
+{
+    "name": "#{project}",
+    "version": "0.0.1",
+    "homepage": "",
+    "authors": [],
+    "description": "",
+    "license": "MIT",
+    "private": true,
+    "dependencies": {
+        "bulma": "*",
+        "vue": "*",
+        "font-awesome": "*",
+        "respond": "*",
+        "jquery": "*"
+    }
+}

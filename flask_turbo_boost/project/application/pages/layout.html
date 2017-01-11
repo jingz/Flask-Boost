@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+    <title>{% block page_title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}"/>
+    {% block meta %}{% endblock %}
+    <link rel="Shortcut Icon" href="/static/image/favicon.png">
+    {# CSS libs #}
+    <link rel="stylesheet" href="/static/css/libs/bulma.css"/>
+    <link rel="stylesheet" href="/static/css/libs/font-awesome.min.css"/>
+    {# CSS layout #}
+    <link rel="stylesheet" href="/static/css/common.css"/>
+    <link rel="stylesheet" href="/static/output/macros.css"/>
+    <link rel="stylesheet" href="/static/css/layout.css"/>
+    {# CSS page #}
+    {% block page_css %}{% endblock %}
+    {# JS global vars #}
+    <!--
+    <script type="text/javascript">
+        var g = {
+            domain: "{{ config.SITE_DOMAIN }}",
+            csrfToken: "{{ csrf_token() }}",
+            rules: {{ rules|safe }},
+            method: "{{ request.method }}",
+            signin: {% if g.user %}true{% else %}false{% endif %},
+            userId: {% if g.user %}{{ g.user.id }}{% else %}false{% endif %}
+        };
+    </script>
+    -->
+    {# JS libs #}
+    <script src="/static/js/libs/respond.min.js"></script>
+    <script src="/static/js/libs/jquery.min.js"></script>
+    <script src="/static/js/init.js"></script>
+</head>
+
+<body>
+
+{# Flash message #}
+{% with messages = get_flashed_messages() %}
+    {% for msg in messages %}
+        {% if msg %}
+        <div class="notification is-danger flash-message" 
+             style='width: 100%;'>{{ msg }}</div>
+        {% endif %}
+    {% endfor %}
+{% endwith %}
+
+<nav class="nav has-shadow">
+    <div class="nav-left">
+        <h1 class='nav-item is-brand'>
+            <a class="title" href="{{ url_for('site.index') }}"> MARCOP </a>
+        </h1>
+        <form class="nav-item" role="search" method="get" action="#">
+            <p class='control has-icon'>
+                <input type="text" name="keyword" class="input" placeholder="Search">
+                <span class="icon">
+                    <i class='fa fa-search'></i>
+                </span>
+            </p>
+        </form>
+    </div>
+
+    <div class="nav-center nav-menu">
+    </div>
+
+    <div class='nav-right'>
+        {% if g.user.is_authenticated %}
+        <a class='nav-item' href="#"><strong>{{ g.user.email or g.user.name }}</strong></a>
+            <a class='nav-item' href="{{ url_for('security.logout') }}"><button class='button is-danger'>Sign out</button></a>
+        {% else %}
+            <a class='nav-item' href="{{ url_for('social_login', provider='facebook') }}">
+                <button class='button' style='background-color: #385998; color: white;'>Login with Facebook</button></a>
+            <a class='nav-item' href="{{ url_for('security.login') }}"><button class='button is-info'>Sign in Email</button></a>
+            <!-- if security allow registerable then modify this -->
+            <a class='nav-item' href="{{ url_for('security.register') }}"><button class='button is-success'>Sign Up</button></a>
+        {% endif %}
+    </div>
+</nav>
+
+{# Please DO NOT change the id below #}
+<div id="main">
+    {% block page_content %}{% endblock %}
+</div>
+
+<footer class='footer'>
+    <div class='container'>
+        <div class='content has-text-centered'>
+            <div id='copyright'>
+                <strong>© 2015 Aproject</strong>
+            </div>
+            <p>
+                <a href="{{ url_for('site.about') }}">About</a>
+            </p>
+        </div>
+    </div>
+</footer>
+
+{# JS layout #}
+<script src="/static/js/layout.js"></script>
+
+{# JS macros #}
+<script src="/static/output/macros.js"></script>
+
+{# JS page #}
+{% block page_js %}{% endblock %}
+
+    </div>
+</body>
+</html>
