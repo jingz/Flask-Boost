@@ -53,7 +53,7 @@ def gen(model_name):
                 _validators.append("v.DataRequired()")
 
             if _validators:
-                _meta['wtform_args'] = 'validators=[%s]' % ", ".join(validators) 
+                _meta['wtform_args'] = 'validators=[%s]' % ", ".join(_validators) 
 
             meta.append(_meta)
 

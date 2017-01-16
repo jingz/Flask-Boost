@@ -1,8 +1,8 @@
 # coding: utf-8
 from flask_wtf import Form
-from wtforms as f
-from wtforms.validators as v
-from ..models import User
+import wtforms as f
+import wtforms.validators as v
+from ..models import {{ model_name|title }}
 # from wtforms.ext.sqlalchemy.fields import QuerySelectField
 # from wtforms import SelectField, SelectMultipleField
 
