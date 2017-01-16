@@ -6,7 +6,9 @@
         {% if field.errors %}
           <p class="control has-icon has-icon-right">
             {{ field(class='input is-danger', **kwargs) }}
-            <i class="fa fa-warning"></i>
+            <span class='icon is-small'>
+                <i class="fa fa-warning"></i>
+            </span>
             <span class="help is-danger">{{ field.errors[0] }}</span>
           </p>
         {% else %}
