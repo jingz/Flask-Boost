@@ -39,12 +39,23 @@
 
 <body>
 
-{# Flash message #}
-{% with messages = get_flashed_messages() %}
-    {% for msg in messages %}
+{# Flash Message #}
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}
         {% if msg %}
-        <div class="notification is-danger flash-message" 
-             style='width: 100%;'>{{ msg }}</div>
+            {% if cat == 'error' %}
+                <div class="notification is-danger flash-message" 
+                     style='width: 100%;'>{{ msg.type }} {{ msg }}</div>
+            {% elif cat == 'info' %}
+                <div class="notification is-info flash-message" 
+                     style='width: 100%;'>{{ msg.type }} {{ msg }}</div>
+            {% elif cat == 'warning' %}
+                <div class="notification is-warning flash-message" 
+                     style='width: 100%;'>{{ msg.type }} {{ msg }}</div>
+            {% else %}
+                <div class="notification is-success flash-message" 
+                     style='width: 100%;'>{{ msg.type }} {{ msg }}</div>
+            {% endif %}
         {% endif %}
     {% endfor %}
 {% endwith %}
