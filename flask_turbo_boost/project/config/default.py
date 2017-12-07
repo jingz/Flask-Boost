@@ -9,13 +9,13 @@ class Config(object):
     TESTING = False
     SECRET_KEY = "\xb5\xb3}#\xb7A\xcac\x9d0\xb6\x0f\x80z\x97\x00\x1e\xc0\xb8+\xe9)\xf0}"
     PERMANENT_SESSION_LIFETIME = 3600 * 24 * 7
-    SESSION_COOKIE_NAME = '#{project}_session'
+    SESSION_COOKIE_NAME = 'frontend_session'
 
     # Root path of project
     PROJECT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
     # Site domain
-    SITE_TITLE = "#{project|title}"
+    SITE_TITLE = "Frontend"
     SITE_DOMAIN = "http://localhost:5000"
 
     # SQLAlchemy config
@@ -32,6 +32,7 @@ class Config(object):
     SECURITY_SEND_REGISTER_EMAIL = False
     SECURITY_SEND_PASSWORD_CHANGE_EMAIL = False
     SECURITY_LOGIN_WITHOUT_CONFIRMATION = False
+    SECURITY_PASSWORD_SALT = '\xc7F\xcce\x03\xc3\x02_\x04\x1e@\x9fC\xf7'
 
     # Flask-DebugToolbar
     DEBUG_TB_INTERCEPT_REDIRECTS = False

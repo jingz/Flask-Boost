@@ -14,7 +14,7 @@ Flask-Security
 flask-oauthlib
 
 # database
-psycopg2 
+# psycopg2 
 
 # util
 itsdangerous==0.24
@@ -27,6 +27,7 @@ raven==5.8.1
 # coverage==4.0.2
 # pylint==1.4.4
 glob2==0.4.1
+bcrypt
 
 # deploy
 # gunicorn==19.3.0
