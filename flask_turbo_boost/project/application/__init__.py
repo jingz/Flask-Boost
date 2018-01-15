@@ -10,7 +10,7 @@ if project_path not in sys.path:
 import time
 import logging
 from flask import Flask, request, url_for, g, render_template, session
-from flask_wtf.csrf import CsrfProtect
+from flask_wtf.csrf import CSRFProtect
 from flask_debugtoolbar import DebugToolbarExtension
 from werkzeug.wsgi import SharedDataMiddleware
 from werkzeug.contrib.fixers import ProxyFix
@@ -40,7 +40,7 @@ def create_app():
     app.wsgi_app = ProxyFix(app.wsgi_app)
 
     # CSRF protect
-    CsrfProtect(app)
+    CSRFProtect(app)
 
     if app.debug or app.testing:
         DebugToolbarExtension(app)
