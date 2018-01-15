@@ -18,6 +18,9 @@ class Config(object):
     SITE_TITLE = "#{project|title}"
     SITE_DOMAIN = "http://localhost:5000"
 
+    # WTForm config
+    # WTF_CSRF_ENABLED = False
+
     # SQLAlchemy config
     # See:
     # https://pythonhosted.org/Flask-SQLAlchemy/config.html#connection-uri-format
