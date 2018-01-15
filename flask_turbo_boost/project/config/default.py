@@ -33,6 +33,8 @@ class Config(object):
     SECURITY_SEND_PASSWORD_CHANGE_EMAIL = False
     SECURITY_LOGIN_WITHOUT_CONFIRMATION = False
     SECURITY_PASSWORD_SALT = '\xc7F\xcce\x03\xc3\x02_\x04\x1e@\x9fC\xf7'
+    # api auth
+    # SECURITY_TOKEN_AUTHENTICATION_HEADER = 'x-access-token'
 
     # Flask-DebugToolbar
     DEBUG_TB_INTERCEPT_REDIRECTS = False
