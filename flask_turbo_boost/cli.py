@@ -297,7 +297,7 @@ def main():
             generate_macro(args)
         else:
             if args.get('--api'):
-                generate_api_project(args, 'api_project')
+                generate_project(args, 'api_project')
             else:
                 generate_project(args, 'project')
     else:
