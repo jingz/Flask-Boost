@@ -6,6 +6,7 @@ Flask Turbo Boost
 
 Usage:
   turbo new <project>
+  turbo new --api <project>
   turbo new controller <controller>
   turbo new action <controller> <action> [-t]
   turbo new form <form>
@@ -46,10 +47,10 @@ logger.setLevel(DEBUG)
 logger.addHandler(StreamHandler())
 
 
-def generate_project(args):
+def generate_project(args, src_project_folder_name='project'):
     """New project."""
     # Project templates path
-    src = os.path.join(dirname(abspath(__file__)), 'project')
+    src = os.path.join(dirname(abspath(__file__)), src_project_folder_name)
 
     project_name = args.get('<project>')
 
@@ -295,7 +296,10 @@ def main():
         elif args.get('macro'):
             generate_macro(args)
         else:
-            generate_project(args)
+            if args.get('--api'):
+                generate_api_project(args, 'api_project')
+            else:
+                generate_project(args, 'project')
     else:
         print(args)
 
