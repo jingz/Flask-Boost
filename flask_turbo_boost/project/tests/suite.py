@@ -4,11 +4,15 @@ from application import create_app
 from application.models import db
 
 
+def create_test_app():
+    os.environ['MODE'] = 'TESTING'
+    app = create_app()
+    return app
+
+
 class BaseSuite(object):
     def setup(self):
-        os.environ['MODE'] = 'TESTING'
-
-        app = create_app()
+        app = create_test_app()
         self.app = app
         self.client = app.test_client()
 
