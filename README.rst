@@ -45,6 +45,7 @@ Features
 * **Scaffold Commands**
 
   * Generate project files: ``turbo new <project>``
+  * Generate API-only project files: ``turbo new --api <project>``
   * Generate controller files: ``turbo new controller <controller>``
   * Generate action files: ``turbo new action <controller> <action> [-t]``
   * Generate form files: ``turbo new form <form>``
@@ -105,36 +106,6 @@ Run local server::
 
     python manage.py run
 
-Setup frontend requirements
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Install Node.js first and then install Bower_, FIS_ and Gulp_ globally::
-
-    npm install -g bower
-    npm install -g fis
-    npm install -g fis-postpackager-simple
-    npm install -g gulp
-
-Install local packages::
-
-    npm install
-    bower install
-
-Run Gulp watch task
-~~~~~~~~~~~~~~~~~~~
-
-::
-
-    gulp watch
-
-LiveReload support
-~~~~~~~~~~~~~~~~~~
-
-Install LiveReload browser extension from here_.
-
-And use ``python manage.py live`` instead of ``python manage.py run`` to start app.
-
-.. _here: http://livereload.com/extensions/
 
 Scaffold commands
 ~~~~~~~~~~~~~~~~~
@@ -142,6 +113,7 @@ Scaffold commands
 ::
 
     turbo new <project>
+    turbo new --api <project>
     turbo new controller <controller>
     turbo new action <controller> <action> [-t]
     turbo new form <form>
