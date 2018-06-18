@@ -61,7 +61,7 @@ def gen(model_name):
         with open(template_path, 'r') as template:
             t = template.read()
             temp = jinja2.Template(t)
-            print temp.render(model_name=model.__name__, columns=meta, slug=_slug)
+            print(temp.render(model_name=model.__name__, columns=meta, slug=_slug))
     else:
-        print "%s Model not found" % model_name
+        print("%s Model not found" % model_name)
 

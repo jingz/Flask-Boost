@@ -20,6 +20,7 @@ Flask-Migrate
 itsdangerous
 six
 raven
+pyyaml
 
 # dev
 # livereload==2.4.0

@@ -18,7 +18,7 @@ def create_fs_admin(name='admin'):
             db.session.add(r)
             db.session.commit()
         except:
-            print "cannot create role"
+            print("cannot create role")
 
     u = models.User.query.filter_by(name=name).first()
     if not u:
@@ -31,8 +31,8 @@ def create_fs_admin(name='admin'):
                 roles=['admin'])
         try:
             db.session.commit()
-            print "admin name: %s was created!" % name
-        except Exception, e:
-            print e.message
+            print("admin name: %s was created!" % name)
+        except Exception as e:
+            print(e.message)
     else:
-        print "admin name: %s already existed" % name
+        print("admin name: %s already existed" % name)

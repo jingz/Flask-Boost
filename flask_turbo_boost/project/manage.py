@@ -9,6 +9,7 @@ from application.models import db
 import application.models as models
 from scripts.admin import admin_manager
 from scripts.form import form_manager
+from scripts.scaffold import scaffold_manager
 
 # Used by app debug & livereload
 PORT = 5000
@@ -21,6 +22,7 @@ migrate = Migrate(app, db)
 manager.add_command('db', MigrateCommand)
 manager.add_command('admin', admin_manager)
 manager.add_command('form', form_manager)
+manager.add_command('scaffold', scaffold_manager)
 
 def _make_shell_context():
     return dict(app=app, db=db, m=models)
@@ -79,7 +81,7 @@ def routes():
         output.append(line)
     
     for line in sorted(output):
-        print line
+        print(line)
 
 
 if __name__ == "__main__":
