@@ -1,9 +1,7 @@
-from flask_sqlalchemy import SQLAlchemy, declarative_base
-from flask_sqlalchemy.model import DefaultMeta, Model
 from datetime import datetime
-import copy
 
-class ActiveRecordModel(Model):
+
+class ActiveRecordMixin(object):
 
     @classmethod
     def columns(cls):
@@ -60,7 +58,7 @@ class ActiveRecordModel(Model):
     def create(cls, **kwargs):
         """ save attrs:dict to database
             ex.
-            User.save(dict(firstname='example', lastname='example'))
+            User.create(dict(firstname='example', lastname='example'))
             #=> return user's instance
         """
         item = cls(**kwargs)
@@ -77,6 +75,20 @@ class ActiveRecordModel(Model):
         """
         return cls(**kwargs)
 
+
+    @classmethod
+    def get_or_create(cls, **kwargs):
+        """ find record that match given params in dict
+            if the record was found return it if not
+            create new and return
+            User.get_or_create({ 'name': 'John' }) # <User #John>
+        """
+        item = cls.query.filter_by(**kwargs).first()
+        if not item:
+            item = cls(**kwargs)
+            db.session.add(item)
+            db.session.commit()
+        return item
 
     def save(self, **kwargs):
         """ save attrs:dict to database
@@ -119,7 +131,7 @@ class ActiveRecordModel(Model):
         return { k: getattr(self, k) for k in self.__class__.columns().keys() }
 
 
-    def update_attributes(self, **kwargs):
+    def update_attributes(self, attrs):
         """ return all colums with its values in dict format
             ex. 
             inst.attributes() #=> { firsname: 'John', lastname: 'Doe' }
@@ -131,7 +143,7 @@ class ActiveRecordModel(Model):
             db.session.add(self)
             db.session.commit()
         except Exception as e:
-            print e
+            print(e)
 
 
     def extract_request(self, attrs):
@@ -147,6 +159,4 @@ class ActiveRecordModel(Model):
                     _new_dict[key] = attrs[key]
             return _new_dict
         except Exception as e:
-            print e
-
-db = SQLAlchemy(model_class=ActiveRecordModel)
+            print(e)
