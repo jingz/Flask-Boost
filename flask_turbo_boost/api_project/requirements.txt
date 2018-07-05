@@ -21,6 +21,8 @@ itsdangerous
 six
 raven
 pyyaml
+#pytest
+#sqlalchemy-utils
 
 # dev
 # livereload==2.4.0
