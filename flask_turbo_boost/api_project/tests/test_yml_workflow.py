@@ -11,8 +11,14 @@ from application.models.work_flow_state import WorkFlowState
 from application.models.work_flow_transition import WorkFlowTransition
 from application.models.work_flow_instance import WorkFlowInstance
 from application.models.work_flow_instance_detail import WorkFlowInstanceDetail
-from application.models.simple_object import SimpleObject
 import yaml
+
+#from application.models.simple_object import SimpleObject
+class SimpleObject(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    def __repr__(self):
+        return '<SimpleObject name = %s>' %self.name
 
 Example = """
 Example:

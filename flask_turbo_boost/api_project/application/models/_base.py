@@ -131,7 +131,7 @@ class ActiveRecordModel(Model):
             db.session.add(self)
             db.session.commit()
         except Exception as e:
-            print e
+            print(e)
 
 
     def extract_request(self, attrs):
@@ -147,6 +147,6 @@ class ActiveRecordModel(Model):
                     _new_dict[key] = attrs[key]
             return _new_dict
         except Exception as e:
-            print e
+            print(e)
 
 db = SQLAlchemy(model_class=ActiveRecordModel)

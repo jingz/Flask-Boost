@@ -10,7 +10,6 @@ from application.models.work_flow import WorkFlow
 from application.models.work_flow_transition import WorkFlowTransition
 from application.models.work_flow_state import WorkFlowState
 from application.models.work_flow_instance import WorkFlowInstance
-from application.models.work_flow_instance_log import WorkFlowInstanceLog
 from application.models.work_flow_instance_detail import WorkFlowInstanceDetail
 
 # Exceptions
