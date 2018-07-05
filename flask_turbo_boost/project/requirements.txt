@@ -20,6 +20,8 @@ flask-oauthlib
 itsdangerous==0.24
 six==1.10.0
 raven==5.8.1
+pytest
+sqlalchemy-utils
 
 # dev
 # livereload==2.4.0
