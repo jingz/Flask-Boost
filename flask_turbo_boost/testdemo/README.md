@@ -1,4 +1,0 @@
-testdemo
-=======
-
-Introduction to testdemo.
