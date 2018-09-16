@@ -26,16 +26,23 @@ Features
   * Split controllers, models, forms, utilities, assets, Jinja2 pages, Jinja2 macros into different directories.
   * Organize Jinja2 page assets (HTML, JavaScript, CSS) to the same directory.
   * Organize Jinja2 macro assets (HTML, JavaScript, CSS) to the same directory.
+  * API-Only Project Structure
 
 * **Batteries Included**
 
   * Use Flask-SQLAlchemy and Flask-Migrate as database tools.
+  * Use Searchable-Mixin for search every Models [Optional]
+  * Use ActiveRecord-Like-Mixin for search every Models [Optional]
+  * Use JWTAuth for authentication [Optional]
+  * Use JsonSchema for validate incoming requests [Optional]
+
   * Use Flask-WTF to validate forms.
   * Use Flask-Script to help writing scripts.
   * Use Flask-Security for user management.
   * Use Flask-OAuthlib for social user authentication.
   * Use Bulma as frontend framework.
 
+  * Dockerfile – Simple dockerfile for development
   * Use Gunicorn to run Flask app and Supervisor to manage Gunicorn processes.
   * Use Fabric as deployment tool.
   * Use Sentry to log exceptions.
@@ -52,7 +59,6 @@ Features
   * Generate model files: ``turbo new model <model>``
   * Generate macro files: ``turbo new macro <category> <macro>`` or ``boost new macro <macro>``
 
-.. _permission: https://github.com/hustlzp/permission
 
 Installation
 ------------
