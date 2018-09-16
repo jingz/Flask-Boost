@@ -98,7 +98,7 @@ class SearchableMixin(object):
         for k, v in di.items():
             col, opt = cls._grep_search_opt(k)
             if col and opt:
-                __where = "{col} {opt} :{column_param}" 
+                __where = "%s.{col} {opt} :{column_param}" % cls.__tablename__
                 sql_opt = cls.SEARCH_OPT_MAPPER.get(opt)
 
                 if opt in ('like', 'not_like', 'contains', 'not_contains'):
@@ -171,7 +171,7 @@ class SearchableMixin(object):
         # sort order by priority
         if len(orders) > 0:
             proc = lambda k: k['priority']
-            order_pattern = u"{column} {direction}"
+            order_pattern = u"%s.{column} {direction}" % cls.__tablename__
             return ", ".join([order_pattern.format(**d) for d in sorted(orders, key=proc)]) 
         else:
             return ""
@@ -186,9 +186,17 @@ class SearchableMixin(object):
         match_val = re.search(cls.SORT_VALUE_REGEXP, value_text, re.IGNORECASE)
         if match_key is not None and match_val is not None:
             col = match_key.group(1) # client_code
+            collate = False
+            if col.startswith('$'):
+                collate = True
+                col = col[1:]
+
             direction, priority = match_val.group(1), match_val.group(2)
             if direction is None: 
                 direction = "ASC"
+            
+            if collate:
+                direction = ("COLLATE NOCASE %s" % direction)
 
             if priority is None:
                 priority = 99

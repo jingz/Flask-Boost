@@ -1,0 +1,27 @@
+# coding: utf-8
+from flask_wtf import Form
+import wtforms as f
+import wtforms.validators as v
+from ..models import {{ model_name|title }}
+# from wtforms.ext.sqlalchemy.fields import QuerySelectField
+# from wtforms import SelectField, SelectMultipleField
+
+
+class {{ model_name|title }}Form(Form):
+    """Form for {{ model_name|title }}"""
+    {% for meta in columns %}
+    {{ meta.col.name }} = f.{{ meta.wtform_type }}("{{ slug(meta.col.name) }}"{% if meta.wtform_args %}, {{ meta.wtform_args }} {% endif %}) {% endfor %}
+
+    # Example of other fields
+    # f.SelectField("Name", choices=[x.id], coerce=int)
+    # f.SelectMultipleField ...
+    # QuerySelectField('Field Name', allow_blank=False,
+    #                                query_factory=lambda Model.query.all(),
+    #                                get_pk=lambda r: r.id
+    #                                get_label=lambda r: r.name)
+    
+    # Example for Custom Validattion
+    # def validate_email(self, field):
+    #     user = User.query.filter(User.email == self.email.data).first()
+    #     if not user:
+    #         raise ValueError("Account doesn't exist.")

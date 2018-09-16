@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% from "_form.html" import field_with_errors %}
+{% from "security/_macros.html" import render_field %}
+{% from "security/_macros.html" import render_field_with_errors, render_field %}
+{% include "security/_messages.html" %}
+
+{% block page_content %}
+<div class='column is-4 is-offset-4'>
+    <section class='section content'>
+        <h2>Sing Up</h2>
+        <form action="{{ url_for_security('register') }}" method="POST" name="register_user_form">
+          {{ register_user_form.hidden_tag() }}
+          {{ field_with_errors(register_user_form.email) }}
+          {{ field_with_errors(register_user_form.password) }}
+          {% if register_user_form.password_confirm %}
+            {{ field_with_errors(register_user_form.password_confirm) }}
+          {% endif %}
+          {{ render_field(register_user_form.submit, class_='button is-primary') }}
+        </form>
+    </section>
+</div>
+{% endblock %}
