@@ -22,6 +22,7 @@ six==1.10.0
 raven==5.8.1
 pytest
 sqlalchemy-utils
+factory_boy
 
 # dev
 # livereload==2.4.0
