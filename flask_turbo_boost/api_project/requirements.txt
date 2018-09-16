@@ -23,6 +23,7 @@ raven
 pyyaml
 #pytest
 #sqlalchemy-utils
+factory_boy
 
 # dev
 # livereload==2.4.0
