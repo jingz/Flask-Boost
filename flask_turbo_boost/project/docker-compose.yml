@@ -1,0 +1,32 @@
+version: '3.3'
+
+services:
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    links:
+      - database
+    depends_on:
+      - database
+    volumes:
+      - '.:/usr/src/app'
+      - './logs:/usr/logs'
+    environment:
+      # - MODE=PRODUCTION
+      - TZ=Asia/Bangkok
+    ports:
+      - 5000:8000
+    command:
+      - "--bind=0.0.0.0:8000"
+      - "--log-file=/usr/logs/gunicorn.error.log"
+      - "--log-level=DEBUG"
+      - "--workers=3"
+      - "--reload"
+
+  database:
+    container_name: database
+    image: postgres:10.5-alpine
+    environment:
+      POSTGRES_PASSWORD: 123123

@@ -4,15 +4,20 @@ RUN mkdir -p /usr/src/app
 
 WORKDIR /usr/src/app
 COPY requirements.txt .
-# RUN pip install --upgrade pip
-# RUN pip install -r requirements.txt
+
 RUN apk update && \
     apk add postgresql-libs python3-dev && \
-    apk add --virtual .build-deps gcc musl-dev postgresql-dev && \
+    apk add --virtual .build-deps gcc musl-dev postgresql-dev libffi-dev && \
     pip install -r requirements.txt --no-cache-dir && \
     apk --purge del .build-deps
 
 
-EXPOSE 5008
+# default flask server 
+# EXPOSE 5000
+# CMD ["python3", "manage.py", "run"]
 
-CMD ["python3", "manage.py", "run"]
+# gunicorn
+RUN mkdir -p /usr/logs && chmod 777 /usr/logs
+EXPOSE 8000
+ENTRYPOINT ["gunicorn", "wsgi:app"]
+CMD ["--capture-output"]
