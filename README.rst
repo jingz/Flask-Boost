@@ -39,7 +39,7 @@ Features
   * Use Flask-WTF to validate forms.
   * Use Flask-Script to help writing scripts.
   * Use Flask-Security for user management.
-  * Use Flask-OAuthlib for social user authentication.
+  * Use Flask-Dance for social user authentication.
   * Use Bulma as frontend framework.
 
   * Dockerfile – Simple dockerfile for development
@@ -58,6 +58,7 @@ Features
   * Generate form files: ``turbo new form <form>``
   * Generate model files: ``turbo new model <model>``
   * Generate macro files: ``turbo new macro <category> <macro>`` or ``boost new macro <macro>``
+
 
 
 Installation
