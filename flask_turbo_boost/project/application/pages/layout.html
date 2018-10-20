@@ -10,7 +10,7 @@
     {% block meta %}{% endblock %}
     <link rel="Shortcut Icon" href="/static/image/favicon.png">
     {# CSS libs #}
-    <link rel="stylesheet" href="/static/css/libs/bulma.css"/>
+    <link rel="stylesheet" href="/static/css/libs/bulma.min.css"/>
     <link rel="stylesheet" href="/static/css/libs/font-awesome.min.css"/>
     {# CSS layout #}
     <link rel="stylesheet" href="/static/css/common.css"/>
@@ -60,12 +60,12 @@
     {% endfor %}
 {% endwith %}
 
-<nav class="nav has-shadow">
-    <div class="nav-left">
-        <h1 class='nav-item is-brand'>
+<nav class="navbar has-shadow">
+    <div class="navbar-start">
+        <h1 class='navbar-item is-brand'>
             <a class="title" href="{{ url_for('site.index') }}"> {#project|title#} </a>
         </h1>
-        <form class="nav-item" role="search" method="get" action="#">
+        <form class="navbar-item" role="search" method="get" action="#">
             <p class='control has-icon'>
                 <input type="text" name="keyword" class="input" placeholder="Search">
                 <span class="icon">
@@ -75,21 +75,21 @@
         </form>
     </div>
 
-    <div class="nav-center nav-menu">
+    <div class="navbar-center nav-menu">
     </div>
 
-    <div class='nav-right'>
+    <div class='navbar-end'>
         {% if g.user.is_authenticated %}
-        <a class='nav-item' href="#"><strong>{{ g.user.email or g.user.name }}</strong></a>
+        <a class='navbar-item' href="#"><strong>{{ g.user.email or g.user.name }}</strong></a>
             <a class='nav-item' href="{{ url_for('security.logout') }}"><button class='button is-danger'>Sign out</button></a>
         {% else %}
         {% if config|attr("FACEBOOK_APP_ID") and config|attr("FACEBOOK_APP_SECRET") %}
-            <a class='nav-item' href="{{ url_for('social_login', provider='facebook') }}">
+            <a class='navbar-item' href="{{ url_for('social_login', provider='facebook') }}">
                 <button class='button' style='background-color: #385998; color: white;'>Login with Facebook</button></a>
             {% endif %}
-            <a class='nav-item' href="{{ url_for('security.login') }}"><button class='button is-info'>Sign in Email</button></a>
+            <a class='navbar-item' href="{{ url_for('security.login') }}"><button class='button is-info'>Sign in Email</button></a>
             <!-- if security allow registerable then modify this -->
-            <a class='nav-item' href="{{ url_for('security.register') }}"><button class='button is-success'>Sign Up</button></a>
+            <a class='navbar-item' href="{{ url_for('security.register') }}"><button class='button is-success'>Sign Up</button></a>
         {% endif %}
     </div>
 </nav>

@@ -15,7 +15,6 @@ from flask_debugtoolbar import DebugToolbarExtension
 from werkzeug.wsgi import SharedDataMiddleware
 from werkzeug.contrib.fixers import ProxyFix
 from six import iteritems
-from .utils.social_auth import get_current_user
 from flask_security.core import current_user, AnonymousUser
 from config import load_config
 
@@ -54,6 +53,7 @@ def create_app():
         app.logger.addHandler(logging.StreamHandler())
         app.logger.setLevel(logging.ERROR)
 
+    
         # Enable Sentry
         if app.config.get('SENTRY_DSN'):
             from .utils.sentry import sentry
@@ -67,12 +67,19 @@ def create_app():
             '/pages': os.path.join(app.config.get('PROJECT_PATH'), 'output/pages')
         })
 
+    # override if use gunicorn as server
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    if gunicorn_logger:
+        app.logger.handlers = gunicorn_logger.handlers
+        app.logger.setLevel(gunicorn_logger.level)
+        app.logger.info('gunicorn logger is active')
+
     # Register components
     register_db(app)
-    register_security(app)
-    # register_social_auth(app)
-    register_routes(app)
     register_jinja(app)
+    register_security(app)
+    register_flask_dance(app)
+    register_routes(app)
     register_error_handle(app)
     register_hooks(app)
 
@@ -133,23 +140,27 @@ def register_security(app):
     from .models import db, User, Role
 
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-    app.security = Security(app, user_datastore)
+    security = Security(app, user_datastore)
+    app.logger.debug(security)
+    from flask import session
 
-    from application.utils.social_auth import init_social_auth
-    init_social_auth(app)
+    @app.before_request
+    def before_request():
+        g.user = current_user
+        if g.user is not None and g.user.has_role('admin'):
+           g._before_request_time = time.time()
+
+    @app.after_request
+    def after_request(response):
+        if hasattr(g, '_before_request_time'):
+            delta = time.time() - g._before_request_time
+            response.headers['X-Render-Time'] = delta * 1000
+        return response
 
 
-def register_social_auth(app):
-    from .models import db
-    from social_flask_sqlalchemy.models import init_social
-    init_social(app, db)
-
-    # from social.flask_app.template_filters import backends
-    from social_flask.template_filters import backends
-    app.context_processor(backends)
-
-    from social_flask.routes import social_auth
-    app.register_blueprint(social_auth)
+def register_flask_dance(app):
+    from .utils.flask_dance import init_flask_dance
+    init_flask_dance(app)
 
 
 def register_db(app):
@@ -187,20 +198,7 @@ def register_error_handle(app):
 
 
 def register_hooks(app):
-    """Register hooks."""
-
-    @app.before_request
-    def before_request():
-       g.user = get_current_user()
-       if g.user is not None and g.user.has_role('admin'):
-           g._before_request_time = time.time()
-
-    @app.after_request
-    def after_request(response):
-        if hasattr(g, '_before_request_time'):
-            delta = time.time() - g._before_request_time
-            response.headers['X-Render-Time'] = delta * 1000
-        return response
+    pass
 
 
 def _get_template_name(template_reference):

@@ -11,10 +11,11 @@ Flask-Admin
 
 # Athentication
 Flask-Security
-flask-oauthlib
+# Authlib
+Flask-Dance[sqla]
 
 # database
-# psycopg2 
+psycopg2 
 
 # util
 itsdangerous==0.24
@@ -31,7 +32,8 @@ factory_boy
 # pylint==1.4.4
 glob2==0.4.1
 bcrypt
+ipython
 
 # deploy
-# gunicorn==19.3.0
+gunicorn
 # Fabric==1.10.2
