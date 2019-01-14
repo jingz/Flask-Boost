@@ -37,12 +37,12 @@ Features
   * Use JsonSchema for validate incoming requests [Optional]
 
   * Use Flask-WTF to validate forms.
-  * Use Flask-Script to help writing scripts.
   * Use Flask-Security for user management.
-  * Use Flask-Dance for social user authentication.
+  * Use Flask-Dance for social user authentication (Sample with facebook and google).
   * Use Bulma as frontend framework.
 
-  * Dockerfile – Simple dockerfile for development
+  * Dockerfile – Sample dockerfile for development
+  * docker-compose.yml – Sample docker-compose for deployment
   * Use Gunicorn to run Flask app and Supervisor to manage Gunicorn processes.
   * Use Fabric as deployment tool.
   * Use Sentry to log exceptions.
