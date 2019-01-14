@@ -1,0 +1,3 @@
+[console_scripts]
+turbo = flask_turbo_boost.cli:main
+

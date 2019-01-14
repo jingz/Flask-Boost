@@ -1,4 +1,5 @@
 # coding: utf-8
+
 import sys
 import os
 
@@ -38,56 +39,34 @@ def create_app():
     # Proxy fix
     app.wsgi_app = ProxyFix(app.wsgi_app)
 
-    # CSRF protect
-    CSRFProtect(app)
-
-    if app.debug or app.testing:
-        DebugToolbarExtension(app)
-
-        # Serve static files
-        app.wsgi_app = SharedDataMiddleware(app.wsgi_app, {
-            '/pages': os.path.join(app.config.get('PROJECT_PATH'), 'application/pages')
-        })
-    else:
-        # Log errors to stderr in production mode
-        app.logger.addHandler(logging.StreamHandler())
-        app.logger.setLevel(logging.ERROR)
-
-    
-        # Enable Sentry
-        if app.config.get('SENTRY_DSN'):
-            from .utils.sentry import sentry
-
-            sentry.init_app(app, dsn=app.config.get('SENTRY_DSN'))
-
-        # Serve static files
-        app.wsgi_app = SharedDataMiddleware(app.wsgi_app, {
-            '/static': os.path.join(app.config.get('PROJECT_PATH'), 'output/static'),
-            '/pkg': os.path.join(app.config.get('PROJECT_PATH'), 'output/pkg'),
-            '/pages': os.path.join(app.config.get('PROJECT_PATH'), 'output/pages')
-        })
-
-    # override if use gunicorn as server
-    gunicorn_logger = logging.getLogger('gunicorn.error')
-    if gunicorn_logger:
-        app.logger.handlers = gunicorn_logger.handlers
-        app.logger.setLevel(gunicorn_logger.level)
-        app.logger.info('gunicorn logger is active')
+    # ensure instance path exists
+    try:
+        os.makedirs(app.instance_path)
+    except OSError:
+        pass
 
     # Register components
+    register_logs(app)
     register_db(app)
     register_jinja(app)
     register_security(app)
-    register_flask_dance(app)
+    # register_flask_dance(app)
     register_routes(app)
     register_error_handle(app)
     register_hooks(app)
+
+    register_scripts(app)
+    register_shell_context(app)
 
     return app
 
 
 def register_jinja(app):
     """Register jinja filters, vars, functions."""
+
+    # CSRF protect
+    CSRFProtect(app)
+
     import jinja2
     from .utils import filters, helpers
 
@@ -135,13 +114,45 @@ def register_jinja(app):
     # 'permissions': permissions
 
 
+def register_logs(app):
+    from .utils.sentry import sentry
+
+    if app.testing:
+        app.logger.setLevel(logging.DEBUG)
+        return
+
+    if app.debug:
+        # DebugToolbarExtension(app)
+        app.logger.setLevel(logging.DEBUG)
+
+
+    if os.environ.get('MODE') == 'PRODUCTION':
+        app.logger.addHandler(logging.StreamHandler())
+        app.logger.setLevel(logging.ERROR)
+        # if set gunicorn
+        gunicorn_logger = logging.getLogger('gunicorn.error')
+        if gunicorn_logger:
+            app.logger.handlers = gunicorn_logger.handlers
+            app.logger.setLevel(gunicorn_logger.level)
+
+        # sentry for production
+        if app.config.get('SENTRY_DSN'):
+            app.logger.info('SENTRY active')
+            sentry.init_app(app, dsn=app.config.get('SENTRY_DSN'),
+                    logging=True, level=logging.ERROR)
+    else:
+        # enable sentry for development
+        if app.config.get('SENTRY_DSN'):
+            app.logger.info('SENTRY is enable')
+            sentry.init_app(app, dsn=app.config.get('SENTRY_DSN'))
+
+
 def register_security(app):
     from flask_security import SQLAlchemyUserDatastore, Security
     from .models import db, User, Role
 
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     security = Security(app, user_datastore)
-    app.logger.debug(security)
     from flask import session
 
     @app.before_request
@@ -201,6 +212,25 @@ def register_hooks(app):
     pass
 
 
+def register_scripts(app):
+    # init migration script
+    from flask_migrate import Migrate
+    from .models import db
+    Migrate(app, db)
+
+    from scripts.seed import seed_cli
+    app.cli.add_command(seed_cli)
+
+
+def register_shell_context(app):
+    @app.shell_context_processor
+    def make_shell_context():
+        from .models import db
+        import application.models as m
+
+        return dict(app=app, db=db, m=m)
+
+
 def _get_template_name(template_reference):
     """Get current template name."""
     return template_reference._TemplateReference__context.name
@@ -214,3 +244,64 @@ def _import_submodules_from_package(package):
                                                          prefix=package.__name__ + "."):
         modules.append(__import__(modname, fromlist="dummy"))
     return modules
+
+
+# API Registers ----------------------------------------------------------------------
+def register_allow_origin(app):
+    @app.after_request
+    def after_request(response):
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Credentials'] = True
+        response.headers['Access-Control-Allow-Methods'] = 'PUT, DELETE, GET, POST, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Access-Token,DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range'
+        response.headers['Access-Control-Expose-Headers'] = 'Content-Length,Content-Range'
+        return response
+
+
+def register_jsonencoder(app):
+    from flask.json import JSONEncoder
+    from datetime import datetime, date, time
+    from decimal import Decimal
+    import enum
+
+    class CustomJSONEncoder(JSONEncoder):
+        def default(self, obj):
+            try:
+                if isinstance(obj, datetime):
+                    # if obj.utcoffset() is not None:
+                    #    obj = obj - obj.utcoffset()
+                    return obj.astimezone(timezone('Asia/Bangkok')).isoformat()
+                if isinstance(obj, date):
+                    return str(obj.isoformat())
+                if isinstance(obj, Decimal):
+                    return str(obj)
+                if isinstance(obj, enum.Enum):
+                    return str(obj.value)
+                if isinstance(obj, time):
+                    return str(obj)
+                iterable = iter(obj)
+            except TypeError:
+                pass
+            return JSONEncoder.default(self, obj)
+
+    app.json_encoder = CustomJSONEncoder
+
+
+def create_celery(app=None):
+    app = app or create_app()
+
+    celery = Celery(
+                app.import_name,
+                backend=app.config.get('RESULT_BACKEND'),
+                broker=app.config.get('BROKER_URL'),
+                timezone='Asia/Bangkok')
+
+    celery.conf.update(task_always_eager=False)
+
+    class ContextTask(celery.Task):
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return self.run(*args, **kwargs)
+
+    celery.Task = ContextTask
+    return celery

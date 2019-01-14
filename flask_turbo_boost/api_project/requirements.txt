@@ -1,7 +1,7 @@
 # Basic
 Flask
 Flask-WTF
-Flask-Script
+# Flask-Script
 Flask-SQLAlchemy
 Flask-DebugToolbar
 Flask-Migrate
@@ -10,8 +10,9 @@ Flask-Migrate
 # Flask-Admin
 
 # Athentication
-# Flask-Security
-# flask-oauthlib
+Flask-Security
+# Authlib
+Flask-Dance[sqla]
 
 # database
 # psycopg2 
@@ -20,19 +21,21 @@ Flask-Migrate
 itsdangerous
 six
 raven
-pyyaml
-#pytest
-#sqlalchemy-utils
-factory_boy
+# pytest
+# sqlalchemy-utils
+# factory_boy
 
 # dev
 # livereload==2.4.0
 # nose==1.3.7
 # coverage==4.0.2
 # pylint==1.4.4
-glob2
+# glob2==0.4.1
 # bcrypt
+ipython
+flask-shell-ipython
 
 # deploy
-# gunicorn==19.3.0
-# Fabric==1.10.2
+# gunicorn
+# Fabric
+python-dotenv

@@ -8,7 +8,7 @@ host_string = config.HOST_STRING
 
 def deploy():
     env.host_string = config.HOST_STRING
-    with cd('/var/www/#{project}'):
+    with cd('/var/www/testupversion'):
         with shell_env(MODE='PRODUCTION'):
             run('git reset --hard HEAD')
             run('git pull')
@@ -16,11 +16,10 @@ def deploy():
             run('gulp')
             with prefix('source venv/bin/activate'):
                 run('pip install -r requirements.txt')
-                run('python manage.py db upgrade')
-                run('python manage.py build')
-            run('supervisorctl restart #{project}')
+                run('flask db upgrade')
+            run('supervisorctl restart testupversion')
 
 
 def restart():
     env.host_string = config.HOST_STRING
-    run('supervisorctl restart #{project}')
+    run('supervisorctl restart testupversion')
