@@ -48,9 +48,7 @@ def create_app():
     # Register components
     register_logs(app)
     register_db(app)
-    register_jinja(app)
     register_security(app)
-    # register_flask_dance(app)
     register_routes(app)
     register_error_handle(app)
     register_hooks(app)
@@ -59,59 +57,6 @@ def create_app():
     register_shell_context(app)
 
     return app
-
-
-def register_jinja(app):
-    """Register jinja filters, vars, functions."""
-
-    # CSRF protect
-    CSRFProtect(app)
-
-    import jinja2
-    from .utils import filters, helpers
-
-    if app.debug or app.testing:
-        my_loader = jinja2.ChoiceLoader([
-            app.jinja_loader,
-            jinja2.FileSystemLoader([
-                os.path.join(app.config.get('PROJECT_PATH'), 'application/macros'),
-                os.path.join(app.config.get('PROJECT_PATH'), 'application/pages')
-            ])
-        ])
-    else:
-        my_loader = jinja2.ChoiceLoader([
-            app.jinja_loader,
-            jinja2.FileSystemLoader([
-                os.path.join(app.config.get('PROJECT_PATH'), 'output/macros'),
-                os.path.join(app.config.get('PROJECT_PATH'), 'output/pages')
-            ])
-        ])
-    app.jinja_loader = my_loader
-
-    app.jinja_env.filters.update({
-        'timesince': filters.timesince
-    })
-
-    def url_for_other_page(page):
-        """Generate url for pagination."""
-        view_args = request.view_args.copy()
-        args = request.args.copy().to_dict()
-        combined_args = dict(view_args.items() + args.items())
-        combined_args['page'] = page
-        return url_for(request.endpoint, **combined_args)
-
-    rules = {}
-    for endpoint, _rules in iteritems(app.url_map._rules_by_endpoint):
-        if any(item in endpoint for item in ['_debug_toolbar', 'debugtoolbar', 'static']):
-            continue
-        rules[endpoint] = [{'rule': rule.rule} for rule in _rules]
-
-    app.jinja_env.globals.update({
-        'absolute_url_for': helpers.absolute_url_for,
-        'url_for_other_page': url_for_other_page
-    })
-    # 'rules': rules,
-    # 'permissions': permissions
 
 
 def register_logs(app):
@@ -124,7 +69,6 @@ def register_logs(app):
     if app.debug:
         # DebugToolbarExtension(app)
         app.logger.setLevel(logging.DEBUG)
-
 
     if os.environ.get('MODE') == 'PRODUCTION':
         app.logger.addHandler(logging.StreamHandler())
@@ -169,11 +113,6 @@ def register_security(app):
         return response
 
 
-def register_flask_dance(app):
-    from .utils.flask_dance import init_flask_dance
-    init_flask_dance(app)
-
-
 def register_db(app):
     """Register models."""
     from .models import db
@@ -183,10 +122,10 @@ def register_db(app):
 
 def register_routes(app):
     """Register routes."""
-    from . import controllers
+    from .controllers import api_v1
     from flask.blueprints import Blueprint
 
-    for module in _import_submodules_from_package(controllers):
+    for module in _import_submodules_from_package(api_v1):
         bp = getattr(module, 'bp')
         if bp and isinstance(bp, Blueprint):
             app.register_blueprint(bp)
@@ -246,7 +185,8 @@ def _import_submodules_from_package(package):
     return modules
 
 
-# API Registers ----------------------------------------------------------------------
+# API Register Helpers -----------------------------------------------------------------
+
 def register_allow_origin(app):
     @app.after_request
     def after_request(response):
