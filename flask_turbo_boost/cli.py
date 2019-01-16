@@ -283,7 +283,7 @@ def generate_macro(args):
 
 
 def main():
-    args = docopt(__doc__, version="Flask-Boost {0}".format(__version__))
+    args = docopt(__doc__, version="Flask-Turbo-Boost {0}".format(__version__))
     if args.get('new'):
         if args.get('controller'):
             generate_controller(args)

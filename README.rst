@@ -106,14 +106,14 @@ Update ``SQLALCHEMY_DATABASE_URI`` in ``config/development.py`` as needed.
 
 Then init tables::
 
-    python manage.py db upgrade
+    flask db upgrade
 
 Run app
 ~~~~~~~
 
 Run local server::
 
-    python manage.py run
+    flask run
 
 
 Scaffold commands
@@ -170,7 +170,7 @@ Create database with name ``your_project_name`` and encoding ``utf8``.
 And run::
 
     export MODE=PRODUCTION
-    python manage.py db upgrade
+    flask db upgrade
 
 Copy config files
 ~~~~~~~~~~~~~~~~~
