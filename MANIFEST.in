@@ -3,6 +3,7 @@ recursive-include tests *
 recursive-include docs *
 prune docs/_build
 recursive-include flask_turbo_boost/project *
+recursive-include flask_turbo_boost/api_project *
 recursive-include flask_turbo_boost/templates *
 prune flask_turbo_boost/project/node_modules
 prune flask_turbo_boost/project/bower_components
