@@ -1,7 +1,7 @@
 from flask import flash
 from application.models import db, OAuth, User
 from flask_dance.contrib.facebook import make_facebook_blueprint, facebook
-from flask_dance.consumer.backend.sqla import SQLAlchemyBackend
+from flask_dance.consumer.storage.sqla import SQLAlchemyBackend
 from flask_dance.consumer import oauth_authorized
 from flask_security import login_user, current_user
 
