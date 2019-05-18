@@ -1,5 +1,5 @@
 # coding: utf-8
-from flask_dance.consumer.backend.sqla import OAuthConsumerMixin
+from flask_dance.consumer.storage.sqla import OAuthConsumerMixin
 from ._base import db
 
 
