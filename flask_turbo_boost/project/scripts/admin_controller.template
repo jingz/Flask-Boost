@@ -1,0 +1,103 @@
+# coding: utf-8
+import application.utils.admin as amu # admin util
+
+from application.models import db, {{ model_name|title }}
+from flask import (render_template, Blueprint,
+                   redirect, url_for, flash, g,
+                   abort, request, current_app)
+from flask_security import login_required
+from flask_wtf.csrf import validate_csrf
+from ..forms.admin.{{ model_name.lower() }} import Admin{{ model_name|title }}Form, Admin{{ model_name|title }}EditForm
+
+bp = Blueprint('admin_{{ model_name.lower() }}s', __name__, url_prefix='/admin/{{ model_name.lower() }}s')
+
+
+@bp.route('', methods=['GET'])
+@login_required
+@amu.admin_required
+def index():
+    # extract search params and filter params
+    sp, fp = amu.convert_params_for_search_format({{ model_name|title }})
+    page = request.args.get('page', 1)
+    {{ model_name.lower() }}s, paging = amu.pagination({{ model_name|title }}.search(sp).order_by({{ model_name|title }}.updated_at.desc()), page)
+    g.filter_params = amu.make_filter_params()
+    return render_template("admin/{{ model_name.lower() }}/index.html",
+                            {{ model_name.lower() }}s={{ model_name.lower() }}s,
+                            pagination=paging)
+
+
+@bp.route('/new', methods=['GET'])
+@login_required
+@amu.admin_required
+def new():
+    f = Admin{{ model_name|title }}Form()
+    return render_template("admin/{{ model_name.lower() }}/new.html", f=f)
+
+
+@bp.route('', methods=['POST'])
+@login_required
+@amu.admin_required
+def create():
+    f = Admin{{ model_name|title }}Form()
+    if not f.validate_on_submit():
+        flash("Cannot Create Record.", category='error')
+        return render_template("admin/{{ model_name.lower() }}/new.html", f=f)
+
+    {{ model_name.lower() }} = {{ model_name|title }}()
+    f.populate_obj({{ model_name.lower() }})
+    db.session.add({{ model_name.lower() }})
+    db.session.commit()
+    flash("Successfully Created")
+    return redirect(url_for(".index"))
+
+
+@bp.route("/<int:id>", methods=["GET"])
+@login_required
+@amu.admin_required
+def show(id):
+    {{ model_name.lower() }} = {{ model_name|title }}.query.get(id)
+    if not {{ model_name.lower() }}: return abort(400)
+    return render_template("admin/{{ model_name.lower() }}/show.html", {{ model_name.lower() }}={{ model_name.lower() }})
+
+
+@bp.route('/<int:id>/edit', methods=['GET', 'POST'])
+@login_required
+@amu.admin_required
+def edit(id):
+    {{ model_name.lower() }} = {{ model_name|title }}.query.get(id)
+    if not {{ model_name.lower() }}: return abort(400)
+
+    f = Admin{{ model_name|title }}EditForm(obj={{ model_name.lower() }})
+    if request.method == 'POST':
+        if f.validate_on_submit():
+            f.populate_obj({{ model_name.lower() }})
+            db.session.commit()
+            flash("Successfully Updated")
+            return redirect(request.args.get('referrer', url_for(".index")))
+        else:
+            flash("Invalid submitted data.", category="error")
+
+    return render_template("admin/{{ model_name.lower() }}/edit.html", f=f, {{ model_name.lower() }}={{ model_name.lower() }})
+
+
+@bp.route("/<int:id>/delete", methods=["GET"])
+@login_required
+@amu.admin_required
+def delete(id):
+    csrf_token = request.args.get('csrf_token', None)
+    if not csrf_token: return abort(400)
+
+    try:
+        validate_csrf(csrf_token)
+        pass
+    except ValidationError as e:
+        flash("Please try again (security timeout).", category='warning')
+        return redirect(request.referrer)
+
+    {{ model_name.lower() }} = {{ model_name|title }}.query.get(id)
+    if not {{ model_name.lower() }}: return abort(400)
+
+    db.session.delete({{ model_name.lower() }})
+    db.session.commit()
+    flash("Delete successful")
+    return redirect(request.referrer)

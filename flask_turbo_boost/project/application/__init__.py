@@ -221,6 +221,9 @@ def register_scripts(app):
     from scripts.seed import seed_cli
     app.cli.add_command(seed_cli)
 
+    from scripts.scaffold_admin import scaffold_admin_cli
+    app.cli.add_command(scaffold_admin_cli)
+
 
 def register_shell_context(app):
     @app.shell_context_processor

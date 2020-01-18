@@ -1,0 +1,127 @@
+{% extends "admin_layout.html" %}
+{% from "_datatable.html" import filter_boolean, filter_date, filter_text, filter_id, sort_link, render_boolean_value %}
+{% from "_utils.html" import admin_pagination %}
+
+{% block page_title %}[Admin] List [[ model_name|title ]]{% endblock %}
+
+{% block page_content %}
+<nav class='level is-small'>
+    <div class='level-left'>
+        <div class='level-item'>
+            <h1 class='title is-4'><a class='has-text-dark' href="{{ url_for('.index') }}">[[ model_name | title ]] Management</a></h1>
+        </div>
+        <!-- Add button -->
+        <div class='level-item'>
+            <a  href="{{ url_for(".new") }}" 
+                class='button is-small is-success'>Create New</a>
+        </div>
+        <!-- paging -->
+        <div class='level-item'>
+            {{ admin_pagination(pagination) }}
+        </div>
+    </div>
+</nav>
+
+
+{% set datatable_filters %}
+<form method='GET' action="{{ url_for('.index') }}">
+<th>
+    <button class='button is-small is-info' title='Search records'>
+        <i class='fa fa-search'></i>
+    </button>
+</th>
+[% for col in meta['columns'] %]
+<th>{{ [[ col['filters']['macro_fn'] ]]("[[ col['filters']['key'] ]]") }}</th>
+[%- endfor %]
+</form>
+{% endset %}
+
+
+{% set datatable_headers %}
+<th>Actions</th>
+[%- for col in meta['columns'] %]
+    [%- if col['sort'] %]
+<th>{{ sort_link("[[ col['col'].name | title ]]", "sort_by_[[ col['col'].name.lower() ]]", priority="[[ loop.index ]]") }}</th>
+    [%- else %]
+<th>[[ col['col'].name|title ]]</th>
+    [%- endif %]
+[%- endfor %]
+{% endset %}
+
+
+{% macro datarow(r) -%}
+<tr>
+    <td class='has-text-centered' style='white-space: nowrap;'>
+        <a class='has-text-dark'
+           href="{{ url_for('.show', id=r.id) }}"
+           title='Show detail this record'>
+            <i class='fa fa-eye'></i>
+        </a>
+        <a class='has-text-link'
+           href="{{ url_for('.edit', id=r.id) }}"
+           title='Edit this record'>
+            <i class='fa fa-edit'></i>
+        </a>
+        <a class='has-text-danger'
+           onclick="javascript:if(!confirm('Are you sure?')){ return false; }"
+           href="{{ url_for('.delete', id=r.id, csrf_token=csrf_token()) }}"
+           title='Delete this record'>
+            <i class='fa fa-trash-alt'></i>
+        </a>
+    </td>
+    [%- for col in meta['columns'] %]
+        [%- if col['render_macro_fn'] %]
+    <td>{{ [[ col['render_macro_fn'] ]](r.[[ col['col'].name.lower() ]]) }}</td>
+        [%- else %]
+    <td>{{ r.[[ col['col'].name.lower() ]] }}</td>
+        [%- endif %]
+    [%- endfor %]
+</tr>
+{%- endmacro %}
+
+
+{% set not_found_result_block %}
+<tr>
+    <td colspan='10'>
+        <div class='message section is-info has-text-centered' style='height: 30vh;'>
+            <h1 class='subtitle'>No result!</h1>
+            {% if g.filter_params %}
+            <a class='button is-small' href="{{ url_for('.index') }}">Reset filters</a>
+            {% endif %}
+        </div>
+    </td>
+</tr>
+{% endset %}
+
+
+<table id='dense-table' class='table is-narrow is-bordered is-fullwidth is-hoverable is-striped is-dense is-size-7'>
+    <thead>
+        <tr>{{ datatable_filters }}</tr>
+        <tr class='has-background-grey-lighter'>{{ datatable_headers }}</tr>
+    </thead>
+
+    <tbody>
+        {% if [[ model_name.lower() ]]s.count() == 0 %}
+            {{ not_found_result_block }}
+        {% endif %}
+
+        <style>
+            .records { cursor: pointer; }
+        </style>
+        {% for [[ model_name.lower() ]] in [[ model_name.lower() ]]s %}
+            {{ datarow([[ model_name.lower() ]]) }}
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr class='has-background-grey-lighter'>{{ datatable_headers }}</tr>
+    </tfoot>
+</table>
+
+<script type='text/javascript'>
+    // init flatpickr for datetime filters
+    var dateFilters = document.getElementsByClassName("date-filter")
+    for(var i = 0; i < dateFilters.length; i++) {
+        dateFilters[i].flatpickr({mode: 'range', enableTime: true})
+    }
+</script>
+{% endblock  %}

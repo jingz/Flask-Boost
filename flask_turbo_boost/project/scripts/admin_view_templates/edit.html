@@ -1,0 +1,21 @@
+{% extends "admin_layout.html" %}
+{% from "_form.html" import field_with_errors_is_small %}
+
+
+{% block page_title %}[Admin] Edit [[ model_name | title ]]{% endblock %}
+{% block page_content %}
+<h2 class='subtitle'>Edit [[ model_name|title ]]</h2>
+<div class='column is-one-third'>
+    <form action="{{ url_for(".edit", id=[[ model_name.lower() ]].id, referrer=request.referrer) }}" method='POST'>
+        {{ f.hidden_tag() }}
+        {% for field in f %}
+            {% if not field.type in ['HiddenField', 'CSRFTokenField'] %}
+                {{ field_with_errors_is_small(field) }}
+            {% endif %}
+        {% endfor %}
+        <hr/>
+        <input type='submit' class='button is-success' value="Edit" />
+        <a class='button' href='{{ request.referrer }}'>Cancel</a>
+    </form>
+</div>
+{% endblock %}

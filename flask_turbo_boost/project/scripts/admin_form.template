@@ -1,0 +1,45 @@
+# coding: utf-8
+from flask_wtf import FlaskForm
+import wtforms as f
+import wtforms.validators as v
+from application.models import {{ model_name|title }}{% for r in (many_relationships + one_relationships) -%}, {{ r.cls }}{%- endfor %}
+# from wtforms import SelectField, SelectMultipleField
+{%- if one_relationships or many_relationships %}
+from wtforms.ext.sqlalchemy.fields import QuerySelectField, QuerySelectMultipleField
+{% endif %}
+
+class Admin{{ model_name|title }}Form(FlaskForm):
+    """Form for {{ model_name|title }}"""
+    {%- for meta in columns %}
+    {{ meta.col.name }} = f.{{ meta.wtform_type }}("{{ slug(meta.col.name) }}"{% if meta.wtform_args %}, {{ meta.wtform_args }} {% endif %}){% endfor %}
+{% for r in one_relationships %}
+    {{ r.key }} = QuerySelectField("{{ r.key|title }}",
+                                   allow_blank=False,
+                                   query_factory=lambda: {{ r.cls }}.query.all(),
+                                   get_pk=lambda r: r.id,
+                                   get_label=lambda r: r)
+{%- endfor %}
+{% for r in many_relationships %}
+    {{ r.key }} = QuerySelectMultipleField("{{ r.key|title }}",
+                                            allow_blank=True,
+                                            query_factory=lambda: {{ r.cls }}.query.all(),
+                                            get_pk=lambda r: r.id,
+                                            get_label=lambda r: r)
+{% endfor %}
+    # Example of other fields
+    # f.SelectField("Name", choices=[x.id], coerce=int)
+    # f.SelectMultipleField ...
+    # QuerySelectField('Field Name', allow_blank=False,
+    #                                query_factory=lambda Model.query.all(),
+    #                                get_pk=lambda r: r.id
+    #                                get_label=lambda r: r.name)
+
+    # Example for Custom Validattion
+    # def validate_email(self, field):
+    #     user = User.query.filter(User.email == self.email.data).first()
+    #     if not user:
+    #         raise ValueError("Account doesn't exist.")
+
+
+class Admin{{ model_name|title }}EditForm(Admin{{ model_name|title }}Form):
+    id = f.HiddenField()

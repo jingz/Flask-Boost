@@ -1,0 +1,65 @@
+{% extends "admin_layout.html" %}
+{% from "_form.html" import field_with_errors %}
+
+{% block page_title %}[Admin] Show [[ model_name | title ]]{% endblock %}
+
+{% block page_content %}
+<div class='level'>
+    <div class='level-left'>
+        <div class="level-item">
+            <h1 class='subtitle'>[[ model_name|title ]] #{{ [[ model_name.lower() ]].id }}</h1>
+        </div>
+        <div class="level-item">
+            <a href="{{ url_for('.edit', id=[[ model_name.lower() ]].id) }}" class='button'>Edit</a>
+        </div>
+    </div>
+</div>
+
+
+<div class='columns is-size-6'>
+
+    <div class='column is-two-third'>
+        <div class='level'>
+            <fieldset class='flakes-information-box' style='width: 100%;'>
+                <legend><h1 class='subtitle'>General Information</h1></legend>
+                [% for col in meta['columns'] %]
+                <dl>
+                    <dt>[[ col['col'].name|title ]]</dt>
+                    <dd><strong>{{ [[ model_name.lower() ]].[[ col['col'].name ]] }}</strong></dd>
+                </dl>
+                [%- endfor %]
+            </fieldset>
+        </div>
+    </div>
+
+    [% if many_relationships %]
+    <div class='column is-one-third'>
+        [% for relate in many_relationships %]
+        <fieldset class='flakes-information-box'>
+            <legend><h1 class='subtitle'>[[ relate['cls'] ]]</h1></legend>
+            {% for r in [[ model_name.lower() ]].relate['key'] %}
+            <li># {{ r.id }} </li>
+            {% endfor %}
+        </fieldset>
+        [% endfor %]
+    </div>
+    [% endif %]
+
+    [% if one_relationships %]
+    <div class='column is-one-third'>
+        [% for relate in one_relationships %]
+        <fieldset class='flakes-information-box'>
+            <legend><h1 class='subtitle'>[[ relate['cls'] ]]</h1></legend>
+                [% for col in relate['meta'] %]
+                <dl>
+                    <dt>[[ col['col'].name|title ]]</dt>
+                    <dd><strong>{{ [[ model_name.lower() ]].[[ col['col'].name ]] }}</strong></dd>
+                </dl>
+                [%- endfor %]
+        </fieldset>
+        [% endfor %]
+    </div>
+    [% endif %]
+</div>
+
+{% endblock %}
