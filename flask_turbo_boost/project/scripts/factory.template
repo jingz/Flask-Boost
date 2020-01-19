@@ -1,0 +1,39 @@
+import factory
+import faker
+from application.models import db, {{ model_name | title }}
+
+class {{ model_name | title }}Factory(factory.alchemy.SQLAlchemyModelFactory):
+    class Meta:
+        model = {{ model_name | title }}
+        sqlalchemy_session = db.session
+        sqlalchemy_session_persistence = 'commit'
+
+{% for meta in columns %}
+    {{ meta.col.name }} = factory.Faker('{{ meta.provider }}'){% endfor %}
+{% for col in exclude_columns %}
+    # {{ col.name }}{% endfor %}
+
+    # relationships
+{% for r in one_relationships %}
+    {{ r.key }} = factory.SubFactory('{{ r.cls }}Factory'){% endfor %}
+{% for r in many_relationships %}
+    @factory.post_generation
+    def {{ r.key }}(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            for o in extracted:
+                self.{{ r.key }}.append(o)
+{% endfor %}
+
+    # more example
+    # using fuzzy
+    # https://factoryboy.readthedocs.io/en/latest/fuzzy.html#
+
+    # cheatsheet
+    # username = factory.Sequence(lambda n: 'john%s' % n)
+    # email = factory.LazyAttribute(lambda o: '%s@example.org' % o.username)
+    # date_joined = factory.LazyFunction(datetime.datetime.now)
+    # gender = factory.Iterator([objects.Profile.GENDER_MALE, objects.Profile.GENDER_FEMALE])
