@@ -1,0 +1,204 @@
+<!doctype html>
+<html>
+<head>
+    <title>{% block page_title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}"/>
+    {% block meta %}{% endblock %}
+    <link rel="Shortcut Icon" href="/static/image/favicon.png">
+    {# CSS libs #}
+    <!--
+    <link rel="stylesheet" href="/static/css/libs/bulma.min.css"/>
+    <link rel="stylesheet" href="/static/css/libs/burger_menu.css"/>
+    <link rel="stylesheet" href="/static/css/libs/flatpickr.min.css"/>
+    <link rel="stylesheet" href="/static/css/libs/fa-all.min.css"/>
+    <link rel="stylesheet" href="/static/css/libs/wfmi-style.css"/>
+    <link rel="stylesheet" href="/static/css/libs/select2.min.css"/>
+    <link rel="stylesheet" href="/static/css/libs/trix.css"/>
+    -->
+
+    <link rel="stylesheet" href="/static/css/admin_prod.css"/>
+    <script src="/static/js/libs/trix.js"></script>
+    {# CSS layout #}
+
+    {# CSS page #}
+    <style>
+    fieldset {
+      border: 1px solid #c0c0c0;
+      margin: 0 2px;
+      padding: 0.35em 0.625em 0.75em; }
+
+    fieldset {
+      -moz-border-radius: 2px;
+      -webkit-border-radius: 2px;
+      border-radius: 2px;
+      padding: 20px 30px 30px 30px; }
+
+      fieldset legend {
+        border-left: 5px solid white;
+        position: relative;
+        left: -5px; }
+
+    .flakes-information-box {
+      border-radius: 4px;
+      padding: 0.3rem  1.3rem 0.7rem 1.3rem; }
+      .flakes-information-box dl {
+          margin-bottom: 0.7rem;
+      }
+      .flakes-information-box li {
+          margin-left: 1rem;
+      }
+
+      .flakes-information-box dl dt {
+        text-transform: uppercase;
+        letter-spacing: 1px; }
+
+      .flakes-information-box dl dd {
+        margin: 0; }
+    </style>
+
+    {% block page_css %}{% endblock %}
+    {# JS global vars #}
+    <script type="text/javascript">
+        var g = {
+            domain: "{{ config.SITE_DOMAIN }}",
+            csrfToken: "{{ csrf_token() }}",
+            method: "{{ request.method }}",
+            signin: {% if g.user %}true{% else %}false{% endif %},
+        };
+    </script>
+    {# JS libs #}
+    <!--
+    <script src="/static/js/libs/respond.min.js"></script>
+    <script src="/static/js/libs/jquery.min.js"></script>
+    <script src="/static/js/libs/flatpickr.min.js"></script>
+    <script src="/static/js/libs/select2.min.js"></script>
+    <script src="/static/js/init.js"></script>
+    -->
+    <script src="/static/js/admin_prod.js"></script>
+</head>
+
+<body>
+
+{# Flash Message #}
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}
+        {% if msg %}
+            {% if cat == 'error' %}
+                <div class="notification is-danger is-radiusless flash-message" 
+                     style='width: 100%;'>{{ msg.type }} {{ msg }}</div>
+            {% elif cat == 'info' %}
+                <div class="notification is-info is-radiusless flash-message" 
+                     style='width: 100%;'>{{ msg.type }} {{ msg }}</div>
+            {% elif cat == 'warning' %}
+                <div class="notification is-warning is-radiusless flash-message" 
+                     style='width: 100%;'>{{ msg.type }} {{ msg }}</div>
+            {% else %}
+                <div class="notification is-success is-radiusless flash-message" 
+                     style='width: 100%;'>{{ msg.type }} {{ msg }}</div>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endwith %}
+
+
+<style type="text/css" media="screen">
+    .b-nav {
+        opacity: 1;
+        top: 0px;
+        background-color: whitesmoke;
+        left: 0px;
+        width: 100%;
+        padding-top: 120px;
+    }
+
+    .b-container {
+        position: fixed;
+        opacity: .5;
+        z-index: 1;
+    }
+
+    .b-brand {
+        opacity: 0;
+    }
+
+    .b-container.is-open {
+        opacity: 1;
+        z-index: 15;
+    }
+
+    .b-container.is-open .b-brand {
+        opacity: 1;
+    }
+
+    .b-nav {
+        position: fixed;
+        height: 100vh;
+    }
+
+    .b-nav li {
+        opacity: 1;
+    }
+</style>
+
+<div class="b-container">
+  <!-- Burger-Brand -->
+  <a href="#" class="b-brand">
+      <strong style='font-size: 1rem;'>{{ g.user.name|truncate(17, '..') }}</strong>
+  </a>
+
+  <div class="b-menu">
+    <div class="b-bun b-bun--top"></div>
+    <div class="b-bun b-bun--mid"></div>
+    <div class="b-bun b-bun--bottom"></div>
+  </div>
+</div>
+
+<nav class='b-nav section'>
+    <aside class="menu">
+      <p class="menu-label is-size-5">
+          Management
+      </p>
+      <ul class="menu-list is-size-4 has-text-right">
+          {% for menu in [ ('Feed', 'admin_feeds'),
+                           ('Entry', 'admin_entries'),
+                           ('User', 'admin_users'),
+                         ] %}
+          {% set _index = menu[1] ~ '.index' %}
+          <li>
+              <strong>
+              <a href="{{ url_for(_index) }}"
+                 class='{% if menu[1] in request.endpoint -%}is-active{% endif %} is-small'>
+                  {{ menu[0] }}
+              </a>
+              </strong>
+          </li>
+          {% endfor %}
+         
+          <li>
+              <strong>
+                  <a class='has-text-link' href="{{ url_for('site.index') }}">Go to Site</a>
+              </strong>
+          </li>
+      </ul>
+    </aside>
+</nav>
+
+
+<!-- Page Content -->
+<section class="section" style='overflow-x:auto;'>
+    {% block page_content %} {% endblock %}
+</section>
+
+
+{# JS macros #}
+<script src="/static/js/layout.js"></script>
+
+{# JS page #}
+{% block page_js %}{% endblock %}
+    </div>
+</body>
+</html>
