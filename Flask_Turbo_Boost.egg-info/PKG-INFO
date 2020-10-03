@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: Flask-Turbo-Boost
-Version: 0.1.0
+Version: 0.2.8
 Summary: Forked Flask-Boost - Flask application generator for boosting your development.
 Home-page: https://github.com/jingz/Flask-Boost
 Author: jingz
@@ -45,12 +45,12 @@ Description: Flask-Boost
           * Use JsonSchema for validate incoming requests [Optional]
         
           * Use Flask-WTF to validate forms.
-          * Use Flask-Script to help writing scripts.
           * Use Flask-Security for user management.
-          * Use Flask-OAuthlib for social user authentication.
+          * Use Flask-Dance for social user authentication (Sample with facebook and google).
           * Use Bulma as frontend framework.
         
-          * Dockerfile – Simple dockerfile for development
+          * Dockerfile – Sample dockerfile for development
+          * docker-compose.yml – Sample docker-compose for deployment
           * Use Gunicorn to run Flask app and Supervisor to manage Gunicorn processes.
           * Use Fabric as deployment tool.
           * Use Sentry to log exceptions.
@@ -68,12 +68,15 @@ Description: Flask-Boost
           * Generate macro files: ``turbo new macro <category> <macro>`` or ``boost new macro <macro>``
         
         
+        
         Installation
         ------------
         
         ::
         
             pip install flask-turbo-boost
+        
+        
         
         Development Guide
         -----------------
@@ -111,14 +114,14 @@ Description: Flask-Boost
         
         Then init tables::
         
-            python manage.py db upgrade
+            flask db upgrade
         
         Run app
         ~~~~~~~
         
         Run local server::
         
-            python manage.py run
+            flask run
         
         
         Scaffold commands
@@ -175,7 +178,7 @@ Description: Flask-Boost
         And run::
         
             export MODE=PRODUCTION
-            python manage.py db upgrade
+            flask db upgrade
         
         Copy config files
         ~~~~~~~~~~~~~~~~~
@@ -196,6 +199,7 @@ Description: Flask-Boost
             service nginx restart
             service supervisor restart
         
+        
         Daily Production Deploy
         -----------------------
         
@@ -214,7 +218,7 @@ Description: Flask-Boost
         
         MIT
         
-Keywords: flask rich-sample generator
+Keywords: flask project template rich-sample generator
 Platform: UNKNOWN
 Classifier: Development Status :: 4 - Beta
 Classifier: Environment :: Web Environment
@@ -222,8 +226,8 @@ Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python
-Classifier: Programming Language :: Python :: 2
-Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
 Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
 Classifier: Topic :: Internet :: WWW/HTTP :: WSGI
 Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
