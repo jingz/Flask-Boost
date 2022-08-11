@@ -1,0 +1,101 @@
+{% macro filter_boolean(name) %}
+    <div class="select is-small">
+      <select name='{{ name }}'>
+          <option value='' {% if g.filter_params.get(name, "") == "" %}selected{% endif %}>Any</option>
+        <option value='1' {% if g.filter_params.get(name, "") == "1" %}selected{% endif %}>Yes</option>
+        <option value='0' {% if g.filter_params.get(name, "") == "0" %}selected{% endif %}>No</option>
+      </select>
+    </div>
+{% endmacro %}
+
+
+{% macro filter_date(name) %}
+<p class='control has-icons-left'>
+    <input class='input is-small date-filter'
+        style='min-width: 100px;'
+        name='{{ name }}'
+        value="{{ g.filter_params.get(name, '') }}"/>
+    <span class='icon is-left'>
+        <i class="fa fa-calendar"></i>
+    </span>
+</p>
+{% endmacro %}
+
+
+{% macro filter_text(name) %}
+<input name='{{ name }}'
+       value="{{ g.filter_params.get(name, '') }}"
+       placeholder='{{ name }}'
+       class='input is-small'/>
+{% endmacro %}
+
+
+{% macro filter_id(name) %}
+<input name='id_eq'
+       style='width: 45px; text-align: center;'
+       value="{{ g.filter_params.get(name, '') }}"
+       placeholder='id'
+       class='input is-small'/>
+{% endmacro %}
+
+
+{% macro render_boolean_value(value) %}
+    {% if value %}
+    <span class="icon has-text-success">
+      <i class="fas fa-circle"></i>
+    </span>
+    {% elif value == NONE %}
+    <span class="icon has-text-grey">
+      <i class="fas fa-circle"></i>
+    </span>
+    {% else %}
+    <span class="icon has-text-danger">
+      <i class="fas fa-circle"></i>
+    </span>
+    {% endif %}
+{% endmacro %}
+
+
+{% macro render_approvers(approvers) %}
+    {% set n = config.get('NUMBER_OF_APPROVERS') %}
+
+    {% if approvers | length > n %}
+        {% for i in range(n) %}
+          {{ render_boolean_value(true) }}
+        {% endfor %}
+    {% else %}
+      <!-- render approved -->
+      {% for i in range(approvers | length % (n + 1)) %}
+          {{ render_boolean_value(true) }}
+      {% endfor %}
+
+      <!-- render un-approved -->
+      {% for i in range(n - (approvers | length % (n + 1))) %}
+          {{ render_boolean_value(false) }}
+      {% endfor %}
+    {% endif %}
+{% endmacro %}
+
+
+{% macro sort_link(display, sort_key, priority='99') %}
+    {% if not g.filter_params.get(sort_key) %}
+        {% set temp = g.filter_params.copy() %}
+        {% set _temp = temp.update({sort_key: 'desc_' + priority}) %}
+        <span>
+            <a class='has-text-link' href="{{ url_for('.index', **temp) }}">{{ display }}</a>
+        </span>
+    {% else %}
+        <span>
+            {% if g.filter_params.get(sort_key) == 'desc_' + priority %}
+                {% set temp = g.filter_params.copy() %}
+                {% set _temp = temp.update({sort_key: 'asc_' + priority}) %}
+            <i class='has-text-info fa fa-plus'></i>
+            {% else %}
+                {% set temp = g.filter_params.copy() %}
+                {% set _temp = temp.pop(sort_key) %}
+            <i class='has-text-info fa fa-minus'></i>
+            {% endif %}
+            <a class='has-text-link' href="{{ url_for('.index', **temp) }}">{{ display }}</a>
+        </span>
+    {% endif %}
+{% endmacro %}

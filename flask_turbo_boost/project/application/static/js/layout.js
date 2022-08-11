@@ -12,7 +12,7 @@
 
     // Flash message
     setTimeout(showFlash, 200);
-    setTimeout(hideFlash, 2000);
+    setTimeout(hideFlash, 5000);
 
     /**
      * Show flash message.
@@ -27,4 +27,22 @@
     function hideFlash() {
         $('.flash-message').slideUp('fast');
     }
+
+})();
+
+
+/* init burger menu */
+(function() {
+      var body = document.body;
+      var burgerMenu = document.getElementsByClassName('b-menu')[0];
+      var burgerContain = document.getElementsByClassName('b-container')[0];
+      var burgerNav = document.getElementsByClassName('b-nav')[0];
+
+      if (burgerMenu) {
+        burgerMenu.addEventListener('click', function toggleClasses() {
+                [body, burgerContain, burgerNav].forEach(function (el) {
+                          el.classList.toggle('is-open');
+                        });
+              }, false);
+      }
 })();

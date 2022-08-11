@@ -1,18 +1,21 @@
 (function () {
     "use strict";
+    if('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    };
 
     // Find out params in routing rules
     var pattern = new RegExp("<[^:]*:?([^>]+)>", "g");
     var result = null;
 
-    $.each(g.rules, function (endpoint, rules) {
-        $.each(rules, function (index, rule) {
-            rule.params = [];
-            while ((result = pattern.exec(rule.rule)) !== null) {
-                rule.params.push(result[1]);
-            }
-        });
-    });
+    // $.each(g.rules, function (endpoint, rules) {
+    //     $.each(rules, function (index, rule) {
+    //         rule.params = [];
+    //         while ((result = pattern.exec(rule.rule)) !== null) {
+    //             rule.params.push(result[1]);
+    //         }
+    //     });
+    // });
 
     /**
      * Generate url for the endpoint.

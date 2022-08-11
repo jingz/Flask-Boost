@@ -16,13 +16,8 @@ class User(db.Model, UserMixin):
 
     is_admin = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.now)
-
-    # Social Auth Provider, Facebook, Google
-    auth_provider_id = db.Column(db.String(255))
-    auth_provider_user_id = db.Column(db.String(255))
-    auth_provider_profile_pic = db.Column(db.String(512))
-    auth_provider_access_token = db.Column(db.String(255))
-    auth_provider_secret = db.Column(db.String(255))
+    updated_at = db.Column(db.DateTime, default=datetime.now,
+            onupdate=datetime.now)
 
     # relationship
     roles = db.relationship("Role", secondary="users_roles", backref='users')

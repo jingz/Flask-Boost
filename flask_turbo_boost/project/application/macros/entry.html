@@ -1,0 +1,17 @@
+{% macro updated_time(item) %}
+<span id="updated-time-{{ item.id }}"></span>
+<script type="text/javascript">
+(function() {
+
+  const utcText = "{{ item.updated | js_utc_string }}";
+  const utcDate = new Date(utcText);
+  const utcOptions = {
+    year: 'numeric', month: 'short',
+    day: 'numeric', hour: 'numeric',
+    minute: 'numeric'
+  };
+  document.getElementById("updated-time-{{ item.id }}").innerHTML = utcDate.toLocaleDateString('en-TH', utcOptions); // new Intl.DateTimeFormat('en-En', { hour: 'numeric', minute: 'numeric', timeZone: "Asia/Bangkok"}).format(utcDate);
+})();
+</script>
+{% endmacro %}
+

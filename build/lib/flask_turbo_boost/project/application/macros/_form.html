@@ -1,0 +1,38 @@
+{% macro field_with_errors(field) %}
+    {% if field.type == 'BooleanField' %}
+        {{ checkbox_field_with_errors(field) }}
+    {% else %}
+        {{ field.label(class='label') }}
+        {% if field.errors %}
+          <p class="control has-icon has-icon-right">
+            {{ field(class='input is-danger', **kwargs) }}
+            <span class='icon is-small'>
+                <i class="fa fa-warning"></i>
+            </span>
+            <span class="help is-danger">{{ field.errors[0] }}</span>
+          </p>
+        {% else %}
+          <p class="control">
+              {{ field(class='input', **kwargs) }}
+          </p>
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+
+
+{% macro checkbox_field_with_errors(field) %}
+    {% if field.errors %}
+        <p class='control'>
+            {{ field(class='checkbox') }}
+            {{ field.label(class='checkbox') }}
+            <span class="help is-danger">{{ field.errors[0] }}</span>
+        </p>
+    {% else %}
+        <p class='control'>
+            <label class='checkbox'>
+                {{ field(class='checkbox') }}
+                {{ field.label() }}
+            </label>
+        </p>
+    {% endif %}
+{% endmacro %}

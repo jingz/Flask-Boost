@@ -1,0 +1,41 @@
+# Basic
+Flask
+Flask-WTF
+# Flask-Script
+Flask-SQLAlchemy
+Flask-DebugToolbar
+Flask-Migrate
+
+# admin
+# Flask-Admin
+
+# Athentication
+Flask-Security
+# Authlib
+Flask-Dance[sqla]
+
+# database
+# psycopg2 
+
+# util
+itsdangerous
+six
+raven
+# pytest
+# sqlalchemy-utils
+# factory_boy
+
+# dev
+# livereload==2.4.0
+# nose==1.3.7
+# coverage==4.0.2
+# pylint==1.4.4
+# glob2==0.4.1
+# bcrypt
+ipython
+flask-shell-ipython
+
+# deploy
+# gunicorn
+# Fabric
+python-dotenv

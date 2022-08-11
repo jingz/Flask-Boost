@@ -1,11 +1,69 @@
 {% macro field_with_errors(field) %}
+    <div class='field'>
     {% if field.type == 'BooleanField' %}
         {{ checkbox_field_with_errors(field) }}
     {% else %}
         {{ field.label(class='label') }}
         {% if field.errors %}
           <p class="control has-icon has-icon-right">
-            {{ field(class='input is-danger', **kwargs) }}
+            {% if field.type == 'TextAreaField' %}
+                {{ field(class='textarea is-danger', **kwargs) }}
+            {% elif field.type == 'FileField' %}
+              {{ field(class='file', **kwargs) }}
+            {% elif field.type in ['QuerySelectField', 'QuerySelectMultipleField'] %}
+                <div class='select'>
+                {{ field(class='select is-danger', **kwargs) }}
+                </div>
+            {% else %}
+                {{ field(class='input is-danger', **kwargs) }}
+            {% endif %}
+            <span class='icon is-small'>
+                <i class="fa fa-warning"></i>
+            </span>
+            {% if field.description %}
+            <span class="help is-info is-small">{{ field.description }}</span>
+            {% endif %}
+            <span class="help is-danger">{{ field.errors[0] }}</span>
+          </p>
+        {% else %}
+          <p class="control">
+            {% if field.type == 'TextAreaField' %}
+              {{ field(class='textarea', **kwargs) }}
+            {% elif field.type == 'FileField' %}
+              {{ field(class='file', **kwargs) }}
+            {% elif field.type in ['QuerySelectField', 'QuerySelectMultipleField'] %}
+                <div class='select'>
+              {{ field(class='select is-fullwidth', **kwargs) }}
+                </div>
+            {% else %}
+              {{ field(class='input', **kwargs) }}
+            {% endif %}
+
+            {% if field.description %}
+            <span class="help is-info is-small">{{ field.description }}</span>
+            {% endif %}
+          </p>
+        {% endif %}
+    {% endif %}
+    </div>
+{% endmacro %}
+
+
+{% macro field_with_errors_is_small(field) %}
+    <div class='field'>
+    {% if field.type == 'BooleanField' %}
+        {{ checkbox_field_with_errors_is_small(field) }}
+    {% else %}
+        {{ field.label(class='label is-small') }}
+        {% if field.errors %}
+          <p class="control has-icon has-icon-right">
+            {% if field.type == 'TextAreaField' %}
+                  {{ field(class='textarea is-small is-danger', **kwargs) }}
+            {% elif field.type in ['QuerySelectField', 'QuerySelectMultipleField'] %}
+                  {{ field(class='select is-small is-danger', **kwargs) }}
+            {% else %}
+                {{ field(class='input is-small is-danger', **kwargs) }}
+            {% endif %}
             <span class='icon is-small'>
                 <i class="fa fa-warning"></i>
             </span>
@@ -13,14 +71,28 @@
           </p>
         {% else %}
           <p class="control">
-              {{ field(class='input', **kwargs) }}
+            {% if field.type == 'TextAreaField' %}
+              {{ field(class='textarea is-small', **kwargs) }}
+            {% elif field.type == 'FileField' %}
+              {{ field(class='file', **kwargs) }}
+            {% elif field.type in ['QuerySelectField', 'QuerySelectMultipleField'] %}
+              {{ field(class='select is-small is-fullwidth', **kwargs) }}
+            {% else %}
+              {{ field(class='input is-small', **kwargs) }}
+            {% endif %}
+
+            {% if field.description %}
+                <span class="help is-info">{{ field.description }}</span>
+            {% endif %}
           </p>
         {% endif %}
     {% endif %}
+    </div>
 {% endmacro %}
 
 
 {% macro checkbox_field_with_errors(field) %}
+    <div class='field'>
     {% if field.errors %}
         <p class='control'>
             {{ field(class='checkbox') }}
@@ -35,4 +107,51 @@
             </label>
         </p>
     {% endif %}
+    </div>
+{% endmacro %}
+
+
+{% macro checkbox_field_with_errors_is_small(field) %}
+    <div class='field'>
+    {% if field.errors %}
+        <p class='control'>
+            {{ field(class='checkbox is-small') }}
+            {{ field.label(class='checkbox is-small') }}
+            <span class="help is-danger">{{ field.errors[0] }}</span>
+        </p>
+    {% else %}
+        <p class='control'>
+            <label class='checkbox'>
+                {{ field(class='checkbox is-small') }}
+                {{ field.label(class='is-size-7') }}
+            </label>
+        </p>
+    {% endif %}
+    </div>
+{% endmacro %}
+
+
+{% macro filter_boolean(name) %}
+    <div class="select is-small">
+      <select name='{{ name }}'>
+        <option value=''>Any</option>
+        <option value='1'>Yes</option>
+        <option value='0'>No</option>
+      </select>
+    </div>
+{% endmacro %}
+
+
+{% macro filter_date(name) %}
+<p class='control has-icons-left'>
+    <input class='input is-small date-filter' name='{{ name }}' />
+    <span class='icon is-left'>
+        <i class="fa fa-calendar"></i>
+    </span>
+</p>
+{% endmacro %}
+
+
+{% macro filter_text(name) %}
+<input name='{{ name }}' placeholder='{{ name }}' class='input is-small'/>
 {% endmacro %}
