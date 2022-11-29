@@ -13,8 +13,8 @@ import logging
 from flask import Flask, request, url_for, g, render_template, session
 from flask_wtf.csrf import CSRFProtect
 from flask_debugtoolbar import DebugToolbarExtension
-from werkzeug.wsgi import SharedDataMiddleware
-from werkzeug.contrib.fixers import ProxyFix
+from werkzeug.middleware.shared_data import SharedDataMiddleware
+from werkzeug.middleware.proxy_fix import ProxyFix
 from six import iteritems
 from flask_security.core import current_user, AnonymousUser
 from config import load_config

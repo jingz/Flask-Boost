@@ -1,6 +1,7 @@
 # Basic
 Flask
 Flask-WTF
+email-validator
 # Flask-Script
 Flask-SQLAlchemy
 Flask-DebugToolbar
@@ -10,12 +11,12 @@ Flask-Migrate
 # Flask-Admin
 
 # Athentication
-Flask-Security
+Flask-Security-Classic
 # Authlib
 Flask-Dance[sqla]
 
 # database
-# psycopg2 
+psycopg2
 
 # util
 itsdangerous
