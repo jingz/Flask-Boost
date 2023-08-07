@@ -5,7 +5,7 @@ import wtforms.validators as v
 from application.models import {{ model_name|title }}{% for r in (many_relationships + one_relationships) -%}, {{ r.cls }}{%- endfor %}
 # from wtforms import SelectField, SelectMultipleField
 {%- if one_relationships or many_relationships %}
-from wtforms.ext.sqlalchemy.fields import QuerySelectField, QuerySelectMultipleField
+from wtforms_sqlalchemy.fields import QuerySelectField, QuerySelectMultipleField
 {% endif %}
 
 class Admin{{ model_name|title }}Form(FlaskForm):
