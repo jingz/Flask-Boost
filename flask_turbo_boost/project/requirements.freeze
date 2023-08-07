@@ -57,3 +57,4 @@ URLObject==2.4.3
 wcwidth==0.2.5
 Werkzeug==2.2.2
 WTForms==3.0.1
+WTForms-SQLAlchemy==0.3

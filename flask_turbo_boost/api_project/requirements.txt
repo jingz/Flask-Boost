@@ -2,6 +2,7 @@
 Flask
 Flask-WTF
 Flask-SQLAlchemy
+WTForms-SQLAlchemy
 Flask-DebugToolbar
 Flask-Migrate
 python-dotenv
@@ -12,7 +13,7 @@ Flask-Security
 # Flask-Dance[sqla]
 
 # Database
-# psycopg2 
+# psycopg2
 
 # util
 itsdangerous
